@@ -475,7 +475,7 @@ if(!function_exists('the_illustration')){
 			
 		}
 		
-		//include(locate_template('template_illustration.php'));
+		include(locate_template('template_illustration.php'));
 		
 	}
 	
@@ -716,101 +716,6 @@ if(!function_exists('collect_matching_paintings')){
 		
 	}
 	
-}
-
-if(!function_exists('generate_random_painting_url2')){
-
-	function generate_random_painting_url2($shape,$id){
-		
-		$urls = new stdClass();
-
-		$current_post_areas_field_content = get_post_meta($id, 'areas', true);
-
-		$current_post_shapes = collect_shapes($current_post_areas_field_content );
-
-		$painting_url = false;
-
-
-
-		$nb_of_shapes = sizeof(current_post_shapes);
-
-		for($i = 0 ; i < $nb_of_shapes ; $i++ ){
-				
-			$urls[$current_post_shapes[$i]] = array();
-				
-		}
-
-		$matching_posts_ids = array();
-
-		$all_published_posts = get_posts( array( 'post_status' => 'publish' ));
-
-
-		foreach ( $all_published_posts as $post ) {
-				
-			$areas_field_content = get_post_meta($post->ID, 'areas', true);
-				
-			$post_shapes = collect_shapes($areas_field_content);
-				
-			echo $post->ID.'___';
-				
-			print_r($post_shapes);
-
-				
-			foreach ( $post_shapes as $s){
-
-				/*foreach ( $current_post_shapes as $cs){
-				 	
-				if($s == $cs && $post->ID != $id){
-
-
-
-				}
-					
-				}*/
-
-				$s = str_replace(' ', '_',$s );
-
-				if($s == $shape && $post->ID != $id){
-						
-					array_push($matching_posts_ids,$post->ID);
-						
-					echo $id;
-						
-					echo $post->ID;
-						
-					break;
-						
-				}
-
-			}
-				
-		}
-
-
-
-		if(count($matching_posts_ids)> 1){
-				
-			$random_index = array_rand ( $matching_posts_ids );
-				
-			$random_id = $matching_posts_ids[$random_index];
-				
-			$painting_url = get_permalink($random_id);
-				
-		}else if(count($matching_posts_ids)== 1){
-				
-			$painting_url = get_permalink($matching_posts_ids[0]);
-		}else{
-				
-			$painting_url = "";
-		}
-
-		return $painting_url;
-
-
-	}
-	
-	
-
 }
 
 
