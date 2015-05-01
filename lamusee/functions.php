@@ -475,7 +475,7 @@ if(!function_exists('the_illustration')){
 			
 		}
 		
-		include(locate_template('template_illustration.php'));
+		//include(locate_template('template_illustration.php'));
 		
 	}
 	
@@ -680,12 +680,15 @@ if(!function_exists('collect_matching_paintings')){
 		
 		$matching_posts_ids = array();
 		
-		$all_published_posts = get_posts( array( 'post_status' => 'publish' ));
+		$query = array( 'post_status' => 'publish','numberposts' => -1 );
+		
+		$all_published_posts = get_posts($query);
+		
 		
 		
 		foreach ( $all_published_posts as $other_post ) {
 			
-			if($other_post != $post){
+			if($other_post->ID != $post->ID){
 			
 				$other_post_areas_str = get_post_meta($other_post->ID, 'areas', true);
 				
@@ -694,13 +697,8 @@ if(!function_exists('collect_matching_paintings')){
 				$other_post_grid = prepare_shape_grid($other_post_shapes);
 				
 				foreach ( $id_grid as $shape_name => $ids){
-					
+
 					if(isset($other_post_grid->$shape_name)){
-						
-						echo $shape_name;
-						echo '<br>';
-						echo $other_post->ID;
-						echo '<br>';
 						
 						array_push($id_grid->$shape_name,$other_post->ID);
 						
