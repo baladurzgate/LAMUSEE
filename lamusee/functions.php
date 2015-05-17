@@ -98,6 +98,9 @@ function html5blank_header_scripts()
 
         wp_register_script('modernizr', get_template_directory_uri() . '/js/lib/modernizr-2.7.1.min.js', array(), '2.7.1'); // Modernizr
         wp_enqueue_script('modernizr'); // Enqueue it!
+        
+        wp_register_script('jquery', get_template_directory_uri() . '/js/lib/jquery.js', array()); // jquery
+        wp_enqueue_script('jquery'); // Enqueue it!
 
         wp_register_script('html5blankscripts', get_template_directory_uri() . '/js/scripts.js', array('jquery'), '1.0.0'); // Custom scripts
         wp_enqueue_script('html5blankscripts'); // Enqueue it!
@@ -415,14 +418,46 @@ function html5_shortcode_demo_2($atts, $content = null) // Demo Heading H2 short
     return '<h2>' . $content . '</h2>';
 }
 
-if(!function_exists('remember_last_single')){
+if(!function_exists('remember_painting')){
 	
-	function remember_last_single(){
+	function remember_painting(){
 		
 		if (is_single()){
 			
-			$_SESSION["last_id"] == $post->ID;
-			$_SESSION["current_id"] == $post->ID;
+			global $post;
+			
+			if (session_status() == PHP_SESSION_NONE) {
+				
+				session_start();
+				
+			}		
+			
+			if(!isset($_SESSION['last_paintings'])){
+				
+				
+				$last_paintings = [$post->ID];
+				
+				$_SESSION['last_paintings'] = $last_paintings;
+				
+				
+				
+			}else{
+				
+				$last_paintings = $_SESSION['last_paintings'];
+				
+				array_unshift($last_paintings,$post->ID);
+	
+				if(count($last_paintings)>4){
+					
+					array_pop($last_paintings);
+					
+				}
+				
+				$_SESSION['last_paintings'] = $last_paintings;
+				
+				
+			}
+			
 			
 		}
 		
@@ -431,7 +466,16 @@ if(!function_exists('remember_last_single')){
 	
 }
 
+if(!function_exists('remember_shape')){
 
+	function remember_shape(){
+
+		history_list();
+
+	}
+
+
+}
 if(!function_exists('the_illustration')){
 	
 	function the_illustration($otherpost=null){
@@ -458,24 +502,22 @@ if(!function_exists('the_illustration')){
 		
 		$paintings_list = collect_matching_paintings();
 		
-		//print_r($paintings_list);
-		
 		choose_random_elem_in($paintings_list);
-		
-		//echo '<br><br>----------------';
-		
-		print_r($paintings_list);
-		
+
 		foreach ($paintings_list as $shape_name => $painting_id){
 			
 			$url = get_permalink($painting_id);
 				
 			$modifed_areas = fill_areas_href($modifed_areas,$shape_name,$url);
 
-			
 		}
 		
-		//include(locate_template('template_illustration.php'));
+		remember_painting();
+		
+		remember_shape();
+		
+		include(locate_template('template_illustration.php'));
+		
 		
 	}
 	
@@ -684,26 +726,56 @@ if(!function_exists('collect_matching_paintings')){
 		
 		$all_published_posts = get_posts($query);
 		
+		$visited_paintings = get_visited_paintings();
 		
+
 		
 		foreach ( $all_published_posts as $other_post ) {
 			
 			if($other_post->ID != $post->ID){
-			
-				$other_post_areas_str = get_post_meta($other_post->ID, 'areas', true);
 				
-				$other_post_shapes = collect_shapes($other_post_areas_str);
+				$was_recently_visited = false;
 				
-				$other_post_grid = prepare_shape_grid($other_post_shapes);
+				$memory = 1;
 				
-				foreach ( $id_grid as $shape_name => $ids){
-
-					if(isset($other_post_grid->$shape_name)){
+				if($visited_paintings != false ){
 						
-						array_push($id_grid->$shape_name,$other_post->ID);
+					foreach ($visited_paintings as $key => $vp){
+						
+						if($key < $memory){
+							
+							if($vp == $other_post->ID){
+								
+								$was_recently_visited = true;
+								
+							}
+							
+						}
 						
 					}
+						
+						
+				}
+				
+				if($was_recently_visited == false){
+				
+			
+					$other_post_areas_str = get_post_meta($other_post->ID, 'areas', true);
+					
+					$other_post_shapes = collect_shapes($other_post_areas_str);
+					
+					$other_post_grid = prepare_shape_grid($other_post_shapes);
+					
+					foreach ( $id_grid as $shape_name => $ids){
 	
+						if(isset($other_post_grid->$shape_name)){
+							
+							array_push($id_grid->$shape_name,$other_post->ID);
+							
+						}
+		
+					}
+				
 				}
 			
 			}
@@ -716,5 +788,63 @@ if(!function_exists('collect_matching_paintings')){
 	
 }
 
+
+if(!function_exists('get_visited_paintings')){
+	
+	function get_visited_paintings(){
+
+		if (session_status() == PHP_SESSION_NONE) {
+		
+			session_start();
+		
+		}
+			
+		if(isset($_SESSION['last_paintings'])){
+			
+			$LVP = $_SESSION['last_paintings'];
+			
+			return $LVP;
+			
+		}else{
+			
+			return false;
+		}
+		
+	}
+	
+}
+
+if(!function_exists('history_list')){
+	
+	function history_list(){
+		 
+		echo $_SESSION['couleur'];
+		
+		
+		
+	}
+	
+}
+	
+if(!function_exists('the_carte')){
+
+	function the_carte($post){
+		
+		if(get_post_format( $post->ID )== 'image'){
+			
+			$artiste = get_field('artiste',$post->ID);
+			$titre_du_tableau = get_field('titre_du_tableau',$post->ID);
+			$technique = get_field('technique',$post->ID);
+			$date = get_field('date',$post->ID);
+			$dimensions = get_field('dimensions',$post->ID);
+			$lieu_de_conservation = get_field('lieu_de_conservation',$post->ID);
+	
+			include(locate_template('template_carte.php'));
+		
+		}
+
+	}
+
+}
 
 ?>
