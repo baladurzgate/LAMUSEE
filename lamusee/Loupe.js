@@ -15,6 +15,8 @@ function Loupe(zoom_img_selector,zoom_cont_selector,map_img_selector,map_cont_se
 	var loupe = this;
 
 	this.init = function(){
+
+		if(zoom_img != false && zoom_cont != false && map_img != false && map_cont != false && frame != false){
 		
 		screen = $('<div id = "loupe_nonDraggableScreen"><div>');
 		screen.css('position','absolute');
@@ -52,6 +54,12 @@ function Loupe(zoom_img_selector,zoom_cont_selector,map_img_selector,map_cont_se
 		 })
 		 
 		 initialized = true;
+
+		}else{
+	
+			console.log('loupe :  ! wrong arguments or empty selectors ! ')
+
+		}
 		
 	}
 	
@@ -127,8 +135,6 @@ function Loupe(zoom_img_selector,zoom_cont_selector,map_img_selector,map_cont_se
 		       zoom_img.css('marginTop',ypos+'px');
 		   }	
 		   
-		   
-
 		}
 		
 	}
