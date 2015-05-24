@@ -15,6 +15,12 @@
 	Theme Support
 \*------------------------------------*/
 
+
+@ini_set( 'upload_max_size' , '10M' );
+@ini_set( 'post_max_size', '10M');
+@ini_set( 'max_execution_time', '300' );
+
+
 if (!isset($content_width))
 {
     $content_width = 900;
@@ -94,16 +100,20 @@ function html5blank_header_scripts()
     if ($GLOBALS['pagenow'] != 'wp-login.php' && !is_admin()) {
 
     	wp_register_script('conditionizr', get_template_directory_uri() . '/js/lib/conditionizr-4.3.0.min.js', array(), '4.3.0'); // Conditionizr
-        wp_enqueue_script('conditionizr'); // Enqueue it!
+        wp_enqueue_script('conditionizr'); 
 
         wp_register_script('modernizr', get_template_directory_uri() . '/js/lib/modernizr-2.7.1.min.js', array(), '2.7.1'); // Modernizr
-        wp_enqueue_script('modernizr'); // Enqueue it!
+        wp_enqueue_script('modernizr'); 
         
         wp_register_script('jquery', get_template_directory_uri() . '/js/lib/jquery.js', array()); // jquery
-        wp_enqueue_script('jquery'); // Enqueue it!
+        wp_enqueue_script('jquery'); 
 
+        wp_register_script('loupe', get_template_directory_uri() . '/js/lib/Loupe.js', array('jquery')); // jquery
+        wp_enqueue_script('loupe');
+        
         wp_register_script('html5blankscripts', get_template_directory_uri() . '/js/scripts.js', array('jquery'), '1.0.0'); // Custom scripts
-        wp_enqueue_script('html5blankscripts'); // Enqueue it!
+        wp_enqueue_script('html5blankscripts');
+        
     }
 }
 
@@ -418,6 +428,8 @@ function html5_shortcode_demo_2($atts, $content = null) // Demo Heading H2 short
     return '<h2>' . $content . '</h2>';
 }
 
+add_query_arg( 'part');
+
 if(!function_exists('remember_painting')){
 	
 	function remember_painting(){
@@ -489,16 +501,22 @@ if(!function_exists('the_illustration')){
 			global $post;
 				
 		}
+
+		$post_url = get_permalink( $post->ID);
 		
 		$image = get_field('lowres_image',$post->ID);
 			
 		$areas = get_field('areas',$post->ID);
 		
 		$image_highres = get_field('image_highres',$post->ID);
-			
+		
 		$modifed_areas = $areas;
 		
-		$text_link = get_field('linked_text',$post->ID);
+		
+		$text_link = add_query_arg( array( 'part' => "text" ));		
+		
+		$details_link = add_query_arg( array( 'part' => "details" ));
+		
 		
 		$paintings_list = collect_matching_paintings();
 		
@@ -539,32 +557,48 @@ if(!function_exists('the_text')){
 			
 		}
 		
-		$text = $post->post_content;
+		$image = get_field('lowres_image',$post->ID);
 		
-		$relation = get_field('linked_painting',$post->ID);
+		$relation = get_field('linked_text',$post->ID);
+		
+		$linked_text  = $relation[0];
+		
+		if(get_post_format( $linked_text->ID )){
 			
-		$linked_object = $relation[0];
+			$text = $linked_text->post_content;
 			
-		$image = get_field( 'lowres_image', $linked_object->ID);
+			$history_link = get_permalink( $post->ID);
+				
+			include(locate_template('template_text.php'));	
+				
+		}else{
+			
+			include(locate_template('missing_text.php'));
+			
+		}
+
 		
-		$history = $linked_object->guid;
-		
-		include(locate_template('template_text.php'));
+
 
 	}
 	
 }
 
+if(!function_exists('the_details')){
 
-if(!function_exists('text_link')){
+	function the_details(){
 
-	function text_link($text){
+		global $post;
 
-		if(isset($text)){
+		if(get_post_format( $post->ID )== 'image'){
+				
+			$image = get_field('lowres_image',$post->ID);
 
-			echo '<div id="txt">'."\n";
-			echo $text."\n";
-			echo '</div>';
+			$image_highdef = get_field('image_highdef',$post->ID);
+				
+			$history_link = get_permalink( $post->ID);
+
+			include(locate_template('template_details.php'));
 
 		}
 
@@ -846,5 +880,11 @@ if(!function_exists('the_carte')){
 	}
 
 }
+
+
+
+
+
+
 
 ?>
