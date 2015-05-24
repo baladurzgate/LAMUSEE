@@ -1,0 +1,323 @@
+@font-face {
+    font-family: fira;
+    src: url(fonts/FiraSans-Book.otf);
+}
+@font-face {
+	font-family: ital;
+	src: url(fonts/FiraSans-BookItalic.otf);
+	}
+
+@font-face {
+	font-family: bold;
+	src: url(fonts/FiraSans-Bold.otf);
+	}
+
+body {
+	font-size: 14px;
+	font-family: fira;
+	background-image: url("fond.jpg");
+	}
+
+.but-menu {
+  text-transform: uppercase;
+  text-align:center;
+  margin:0px;
+  width:100%;
+  heigth:20px;
+  -moz-column-count:3;
+  -webkit-column-count:3;
+  -o-column-count:3;
+  column-count:3;
+  -moz-column-gap:19px;
+  -webkit-column-gap:19px;
+  -o-column-gap:19px;
+  column-gap:19px;
+}
+		.col-left{
+			top: 35px;
+			left: 12%;
+			background: white;
+			width:120px;
+			text-align:center;
+			position:absolute;
+			outline: 15px solid white;
+	}
+
+#history{
+			margin-top:20px;
+			color: gray
+		}
+
+#txt{
+			position : absolute;
+			top:25px;
+			left : 2%;
+			height: 600px;
+			background : white;
+			width: 320px;
+			padding: 10px;
+			padding-left: 4px;
+			overflow-x: scroll;
+			overflow-x:hidden;
+			font-size: 14.5px;
+			line-height: 26px;
+			
+		}
+		
+		#txt3{
+			position : absolute;
+			top:40px;
+			left : 2%;
+			height: 225px;
+			background : white;
+			width: 320px;
+			padding: 10px;
+			padding-left: 4px;
+			overflow-x: scroll;
+			overflow-x:hidden;
+			font-size: 12px;
+			line-height: 18px;
+			
+			
+		}
+		
+				#txt4{
+			position : absolute;
+			top:320px;
+			left : 2%;
+			height: 405px;
+			background : white;
+			width: 320px;
+			padding: 10px;
+			padding-left: 4px;
+			overflow-x: scroll;
+			overflow-x:hidden;
+			font-size: 12px;
+			line-height: 18px;
+			
+			
+		}
+		
+		
+		
+
+#txt2{
+			position : absolute;
+			top:40px;
+			right : 3%;
+			height: 90%;
+			background : white;
+			width: 350px;
+			padding: solid 15px white;
+			overflow-x: scroll;
+			overflow-x:hidden;
+			font-size: 15px;
+			line-height: 28px;
+			padding: 2px;
+		}
+i{
+		font-family: ital;
+
+		}
+b{
+	font-family: bold;
+
+	}
+
+#carte{
+	background-color: white;
+	padding-left: 12px;
+	padding-right: 12px;
+	padding-bottom: 12px;
+}
+
+
+#conteneur {
+  width:auto;
+  margin-left:40px;
+  margin-right:40px;
+/* ici on positionne le conteneur Ã  un endroit fixe
+	position:absolute;
+	top:12%;
+	bottom: 12%;
+    height: auto;*/
+}
+
+#illustration_txt {
+		/* pour Ã©viter que <figure> ne possÃ¨de une marge extÃ©rieure  */
+		margin: 0;
+    left: 30%;
+    top:20px;
+    height:100px;
+    position:absolute;
+		}
+
+.imgborder{
+		/*border:solid 15px white;*/
+	background-color:white;
+	padding:10px;
+    /*height:600px*/;
+
+		}
+
+.minia-zoom{
+    /*border:solid 15px white;*/
+    width:auto;
+    position:fixed;
+    float:right;
+    }
+.cloud-zoom-loading{
+}
+
+#illustration {
+		/* pour Ã©viter que <figure> ne possÃ¨de une marge extÃ©rieure  */
+		margin: 0;
+    left: 30%;
+    /*top:20px;*/
+    height:100px;
+    position:absolute;
+		}
+		
+		#illustrationl {
+		/* pour Ã©viter que <figure> ne possÃ¨de une marge extÃ©rieure  */
+		margin: 0;
+    left: 25%;
+    /*top:40px;*/
+    height:100px;
+    position:absolute;
+		}
+
+
+
+
+.legende {
+		position: absolute;
+		background: white;
+		font-weight: bold;
+		margin: 0 auto;
+		width:100%;
+		}
+
+.but-menu {
+		bottom
+}
+
+/*
+LES BOUTONS SLIDE
+*/
+
+.fils-left{
+  width:auto;
+  height:100%;
+  text-align:center;
+  vertical-align:middle;
+  right:10px;
+  position:fixed;
+}
+
+.fils-right{
+  width:auto;
+  height:100%;
+  text-align:center;
+  vertical-align:middle;
+  left:10px;
+  position:fixed;
+}
+
+.slide-left{
+  padding:2px;
+  background:white;
+  padding:2px;
+  width:auto;
+  height:auto;
+  position:relative;
+  top:50%;
+  margin-top:-25px;
+  text-transform:capitalize;
+  line-height:18px;
+  letter-spacing:1px;
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+}
+
+.slide-right{
+  padding:2px;
+  background:white;
+  padding:2px;
+  width:auto;
+  height:auto;
+  position:relative;
+  top:50%;
+  margin-top:-25px;
+  text-transform:capitalize;
+  line-height:18px;
+  letter-spacing:1px;
+  -webkit-transform: rotate(-90deg);
+  -moz-transform: rotate(-90deg);
+  -o-transform: rotate(-90deg);
+}
+
+a {
+  text-decoration:none;
+  color:black;
+}
+
+.slide-right:hover, .slide-left:hover {
+  color:white;
+  background:grey;
+}
+
+.displaynone{
+	
+	display:none;
+}
+
+/* SCROLLBARS
+
+::-webkit-scrollbar {
+width: 5px; }
+
+::-webkit-scrollbar-track {
+  -webkit-border-radius: 0px;
+  background-color:#fff;
+  border-radius: 0px;
+  }
+
+::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 0px;
+  border-radius: 0px;
+  background:#fc8a3a;
+}*/
+
+/*ZOOM partie */
+
+#source_frame{
+
+}
+#source_img{
+	width:100%;
+	outline: 10px solid white;
+}
+#zone_selector{
+	outline: solid 3px red;
+}
+
+#zoom_frame{
+	width: 500px;
+	height: 600px;
+	float:left;
+	margin-left:5%;
+	overflow:hidden;
+	
+}
+
+.white_border{
+	 /*padding:10px;
+	 background-color:white;*/
+	float:left;
+	width:200px;
+	margin-left:5%;
+	height: auto;
+	
+}
