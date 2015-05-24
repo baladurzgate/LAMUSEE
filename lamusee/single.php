@@ -18,12 +18,6 @@
 				<a class = "displaynone" href="<?php the_permalink(); ?>" title="<?php the_title(); ?>"><?php the_title(); ?></a>
 			</h1>
 			<!-- /post title -->
-
-			<!-- post details -->
-			<span class="date displaynone"><?php the_time('F j, Y'); ?> <?php the_time('g:i a'); ?></span>
-			<span class="author displaynone"><?php _e( 'Published by', 'html5blank' ); ?> <?php the_author_posts_link(); ?></span>
-			<span class="comments displaynone"><?php if (comments_open( get_the_ID() ) ) comments_popup_link( __( 'Leave your thoughts', 'html5blank' ), __( '1 Comment', 'html5blank' ), __( '% Comments', 'html5blank' )); ?></span>
-			<!-- /post details -->
 			
 				<?php 
 				
@@ -32,8 +26,34 @@
 					switch ($format){
 						
 						case 'image':
+							
+							if (isset($_GET['part']))
+							{
+								$part = sanitize_text_field($_GET['part']);
 								
-							the_illustration();
+								switch ($part){
+									
+									
+									case 'text':
+											
+										the_text();
+									
+									break;
+									
+									case 'details':
+											
+										the_details();
+											
+									break;
+									
+								}
+								
+							}else{
+								
+								the_illustration();
+								
+							}
+
 								
 						break;
 						
@@ -48,20 +68,6 @@
 
 				?>
 				
-				<!--  <div class="col-left" >
-					<div class="legende">...</div>
-				</div>
-				
-				<div class="fils-left">
-					<div class="slide-left"><a href="<?php echo $zoom; ?>">▲<br>détail</a></div>
-				</div>
-				
-				<div class="fils-right">
-					<div class="slide-right"><a href="<?php echo get_field('linked_text') ?>" >▲<br>texte</div>
-				</div>-->
-				
-		
-		
 		</article>
 		<!-- /article -->
 		
