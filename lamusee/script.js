@@ -47,6 +47,36 @@
 			 
 			    refresh_history();
 			    
+				if($('#details')){
+					
+					loupe = new Loupe('#zoom_img','#zoom_frame','#source_img','#source_frame','#zone_selector');
+					loupe.init();
+					loupe.update_scale();
+									
+					
+				}
+			    
+		});
+		
+
+		var loupe;
+
+		$(window).load(function(){
+			
+
+			
+
+		});
+		
+
+		$( window ).resize(function() {
+			
+			if($('#details')){
+			
+				loupe.update_scale();
+			
+			}
+			
 		});
 		  
 		function storeShape($str){
@@ -92,6 +122,8 @@
 	});
 	
 })(jQuery, this);
+
+/*previous functiosn still called in some posts*/
 
 function parse_shape_history(){}
 
