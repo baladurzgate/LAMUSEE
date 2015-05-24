@@ -1,6 +1,6 @@
 
-		var resp_areas = new areasScaler('#resp_img');
-		resp_areas.update();
+		//var resp_areas = new areasScaler('#resp_img');
+		//resp_areas.update();
 		
 
 		function areasAutoScaler (img_selector){
