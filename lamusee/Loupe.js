@@ -1,65 +1,96 @@
-function Loupe(zoom_img_selector,zoom_cont_selector,map_img_selector,map_cont_selector,frame_selector){
+/*! Loupe v1.0.0 | (c) 2015 alexandecormier, | GNU GPL license */
+function Loupe(zoom_img_selector,zoom_frame_selector,source_img_selector,source_frame_selector,zone_selector){
 	
-	var zoom_img =  $(zoom_img_selector);
-	var zoom_cont =  $(zoom_cont_selector);
-	var map_img =  $(map_img_selector);
-	var map_cont =  $(map_cont_selector);
-	var frame = $(frame_selector);
+	var zoom_img =  jQuery(zoom_img_selector);
+	var zoom_frame =  jQuery(zoom_frame_selector);
+	var source_img =  jQuery(source_img_selector);
+	var source_frame =  jQuery(source_frame_selector);
+	var zone = jQuery(zone_selector);
 	var screen;
 
 	var initialized = false , down = false;
 	
-	var xlast = 0,ylast = 0,parentOffset ,xrelative , yrelative ,xcoef ,ycoef , xcenter , ycenter , xpadding , ypadding , xwindow , ywindow;	
+	var xlast = 0,
+	ylast = 0,
+	parentOffset,
+	xrelative, 
+	yrelative,
+	xcoef,
+	ycoef,
+	xcenter,
+	ycenter,
+	xpadding,
+	ypadding,
+	xwindow,
+	ywindow,
+	zoom_scale;	
 
 
 	var loupe = this;
 
 	this.init = function(){
 
-		if(zoom_img != false && zoom_cont != false && map_img != false && map_cont != false && frame != false){
-		
-		screen = $('<div id = "loupe_nonDraggableScreen"><div>');
-		screen.css('position','absolute');
-		screen.insertAfter(frame);
-		
-		zoom_cont.css('overflow','hidden')
-		frame.css('position','absolute');
-		
-		this.update_zoom_frame();
-		
-		map_cont.mousedown(function() {
-		    down = true;
-		})
-		$(document).mouseup(function() {
-		    down = false;  
-		});		
-		
-		map_cont.mousemove(function(e){
+		if(zoom_img != false && zoom_frame != false && source_img != false && source_frame != false && zone != false){
 			
-				if(down){
-		 
+			if(zoom_img.attr('src')!= "" && source_img.attr('src')!= ""){
+		
+				screen = jQuery('<div id = "loupe_nonDraggableScreen"><div>');
+				screen.css('position','absolute');
+				screen.insertAfter(zone);
+				
+				zoom_frame.css('overflow','hidden')
+				zone.css('position','absolute');
+				
+				this.update_zoom_frame();
+				
+				source_frame.mousedown(function() {
+				    down = true;
+				})
+				jQuery(document).mouseup(function() {
+				    down = false;  
+				});		
+				
+				source_frame.mousemove(function(e){
+					
+						if(down){
+				 
+							loupe.update_position(e);
+							loupe.update_zoom_frame();
+			
+						}
+					       
+				 })
+				 
+				source_frame.click(function(e){
+					 
+					
 					loupe.update_position(e);
 					loupe.update_zoom_frame();
-	
-				}
-			       
-		 })
-		 
-		map_cont.click(function(e){
-			 
+					
+				 })
+				 
+				 initialized = true;
 			
-			loupe.update_position(e);
-			loupe.update_zoom_frame();
-			
-		 })
-		 
-		 initialized = true;
+			}else{
+				
+				zoom_img.hide();
+				zoom_frame.hide();
+				source_img.hide();
+				source_frame.hide();
+				zone.hide();
+				screen.hide();	
+				
+				console.log('loupe :  ! no src in images ! ')
+				
+			}
 
 		}else{
 	
 			console.log('loupe :  ! wrong arguments or empty selectors ! ')
 
 		}
+		
+		console.log('Loupe init');
 		
 	}
 	
@@ -70,13 +101,13 @@ function Loupe(zoom_img_selector,zoom_cont_selector,map_img_selector,map_cont_se
 		
 		if(initialized){
 			
-			parentOffset = map_cont.offset();
+			parentOffset = source_frame.offset();
 		
 			xlast = e.pageX - parentOffset.left;
 			ylast = e.pageY - parentOffset.top;
 			
-			xwindow = (e.pageX / map_cont.innerWidth()) - (parentOffset.left / map_cont.innerWidth());
-			ywindow = (e.pageY / map_cont.innerWidth()) - (parentOffset.top  / map_cont.innerWidth());	
+			xwindow = (e.pageX / source_frame.innerWidth()) - (parentOffset.left / source_frame.innerWidth());
+			ywindow = (e.pageY / source_frame.innerWidth()) - (parentOffset.top  / source_frame.innerWidth());	
 		
 		}
 		
@@ -86,8 +117,8 @@ function Loupe(zoom_img_selector,zoom_cont_selector,map_img_selector,map_cont_se
 		
 		if(initialized){
 		
-			xlast = xwindow * map_cont.innerWidth();
-			ylast = ywindow * map_cont.innerWidth();
+			xlast = xwindow * source_frame.innerWidth();
+			ylast = ywindow * source_frame.innerWidth();
 	
 			this.update_zoom_frame();
 		
@@ -100,38 +131,38 @@ function Loupe(zoom_img_selector,zoom_cont_selector,map_img_selector,map_cont_se
 		
 		if(initialized){
 			
-			screen.css('width',map_img.width()+'px');
-			screen.css('height',map_img.height()+'px');
+			screen.css('width',source_img.width()+'px');
+			screen.css('height',source_img.height()+'px');
 	        
 	        xrelative = xlast; 
 	        yrelative = ylast;
 	        
-	        xcoef = zoom_img.width() /  map_img.width();
-	        ycoef = zoom_img.height() /  map_img.height();
+	        xcoef = zoom_img.width() /  source_img.width();
+	        ycoef = zoom_img.height() /  source_img.height();
 	        
-	        xpadding = (map_cont.css('padding-left').replace("px", "")) * xcoef;
-	        ypadding = (map_cont.css('padding-top').replace("px", "")) * ycoef;
+	        xpadding = (source_frame.css('padding-left').replace("px", "")) * xcoef;
+	        ypadding = (source_frame.css('padding-top').replace("px", "")) * ycoef;
 	        
-	        xcenter = (zoom_cont.innerWidth()*0.5)+xpadding;
-	        ycenter = (zoom_cont.innerHeight()*0.5)+ypadding;
+	        xcenter = (zoom_frame.innerWidth()*0.5)+xpadding;
+	        ycenter = (zoom_frame.innerHeight()*0.5)+ypadding;
 	        
 	        xpos = ( xrelative * - xcoef ) + xcenter;
 	       	ypos = ( yrelative * - ycoef ) + ycenter;
 	       	
-			frame.css('width',zoom_cont.innerWidth()/xcoef+'px');
-			frame.css('height',zoom_cont.innerHeight()/ycoef+'px');
+	       	zone.css('width',zoom_frame.innerWidth()/xcoef+'px');
+	       	zone.css('height',zoom_frame.innerHeight()/ycoef+'px');
 	        
-		   if(xlast  < map_cont.innerWidth() && xlast  > 1){
+		   if(xlast  < source_frame.innerWidth() && xlast  > 1){
 			   
-			   frame.css('left',parentOffset.left + (xlast-(frame.width()/2))+'px');
+			   zone.css('left',parentOffset.left + (xlast-(zone.width()/2))+'px');
 			   zoom_img.css('marginLeft',xpos+'px');
 			   
 		   }
 		   
-		   if(ylast  < map_cont.innerHeight() && ylast  > 1){
+		   if(ylast  < source_frame.innerHeight() && ylast  > 1){
 			   
 			  	
-			   frame.css('top',parentOffset.top + (ylast-(frame.height()/2))+'px');		        
+			   zone.css('top',parentOffset.top + (ylast-(zone.height()/2))+'px');		        
 		       zoom_img.css('marginTop',ypos+'px');
 		   }	
 		   
