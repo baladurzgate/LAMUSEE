@@ -111,6 +111,9 @@ function html5blank_header_scripts()
         wp_register_script('loupe', get_template_directory_uri() . '/js/lib/Loupe.js', array('jquery')); // jquery
         wp_enqueue_script('loupe');
         
+        wp_register_script('AAS', get_template_directory_uri() . '/js/lib/areasAutoScaler.js', array('jquery')); // jquery
+        wp_enqueue_script('AAS');
+        
         wp_register_script('html5blankscripts', get_template_directory_uri() . '/js/scripts.js', array('jquery'), '1.0.0'); // Custom scripts
         wp_enqueue_script('html5blankscripts');
         
@@ -702,6 +705,7 @@ if(!function_exists('fill_areas_href')){
 
 }
 
+
 if(!function_exists('choose_random_elem_in')){
 
 	function choose_random_elem_in($strclass){
@@ -803,7 +807,7 @@ if(!function_exists('collect_matching_paintings')){
 					foreach ( $id_grid as $shape_name => $ids){
 	
 						if(isset($other_post_grid->$shape_name)){
-							
+
 							array_push($id_grid->$shape_name,$other_post->ID);
 							
 						}
@@ -880,6 +884,82 @@ if(!function_exists('the_carte')){
 	}
 
 }
+
+
+
+if(!function_exists('get_shape_list')){
+
+	function get_shape_list(){
+		
+		$shape_list = array();
+
+		$query = array( 'post_status' => 'publish','numberposts' => -1 );
+
+		$all_published_posts = get_posts($query);
+		
+		foreach ( $all_published_posts as $post ) {
+			
+			$post_areas_str = get_field('areas',$post->ID);
+			
+			$post_shapes = collect_shapes($post_areas_str);
+			
+			$added_shapes = array();
+			
+			$treated_shapes = array();
+			
+			foreach ( $post_shapes as  $shape ) {
+				
+				$match1 = 0;
+				
+				if(count($shape_list)>0){
+					
+					foreach ( $shape_list as $key => $from_list ) {
+						
+						if($shape == $from_list['name'] && $shape != "" && !isset($treated_shapes[$shape]) ){
+							
+							array_push($shape_list[$key]['paintings'],$post->ID);
+							
+							$match1++;
+							
+							$treated_shapes[$shape] = true;
+
+							
+						}
+				
+					}
+				
+				}
+				
+				if($match1 == 0 && $shape != "" && !isset($treated_shapes[$shape])){
+					
+					$row = array();
+					
+					$row['name']= $shape;
+					
+					$row['paintings'] = array();
+						
+					array_push($row['paintings'],$post->ID);
+						
+					array_push($added_shapes,$row);
+					
+					$treated_shapes[$shape] = true;
+					
+				}
+				
+			}
+				
+			$merged_shape_list = array_merge($shape_list,$added_shapes);
+			
+			$shape_list = $merged_shape_list ;
+				
+		}
+		
+		return $shape_list;
+
+	}
+
+}
+
 
 
 
