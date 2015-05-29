@@ -12,8 +12,9 @@
 			    	if($(this).attr("href").indexOf('#') != -1){
 			    		
 				    	//$(this).remove();
-				    	
+			    		$(this).css( 'cursor', 'initial' );
 				    	console.log($(this).attr("href"));
+				    	
 				    	
 			    	}
 				   
@@ -47,23 +48,35 @@
 			 
 			    refresh_history();
 			    
-				if($('#details')){
-					
-					loupe = new Loupe('#zoom_img','#zoom_frame','#source_img','#source_frame','#zone_selector');
-					loupe.init();
-					loupe.update_scale();
-									
-					
-				}
-			    
+
 		});
 		
-
+		
 		var loupe;
+		
+		var aScaler;
+		
 
 		$(window).load(function(){
-			
 
+			
+			if($('#details')){
+				
+				loupe = new Loupe('#zoom_img','#zoom_frame','#source_img','#source_frame','#zone_selector');
+				//loupe.init();
+				//loupe.update_scale();
+								
+				
+			}
+			
+			if($('map')){
+				
+				//var aScaler = new areasAutoScaler('#tableau');
+				//aScaler.update();				
+				
+				
+			}
+		    
 			
 
 		});
@@ -76,6 +89,12 @@
 				loupe.update_scale();
 			
 			}
+			if($('map')){
+				
+				//aScaler.update();				
+				
+			}
+			
 			
 		});
 		  
@@ -117,13 +136,19 @@
 			$('#history').html(shapes_history);
 
 		}
+		
+		function add_class_to_areas(){
+			
+			
+			
+			
+			
+		}
 		  
 		  
 	});
 	
 })(jQuery, this);
-
-/*previous functiosn still called in some posts*/
 
 function parse_shape_history(){}
 
