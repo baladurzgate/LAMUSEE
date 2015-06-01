@@ -58,13 +58,15 @@
 		
 
 		$(window).load(function(){
+			
 
 			
-			if($('#details')){
+			if($('.details')){
 				
 				loupe = new Loupe('#zoom_img','#zoom_frame','#source_img','#source_frame','#zone_selector');
-				//loupe.init();
-				//loupe.update_scale();
+				
+				loupe.init();
+				loupe.update_scale();
 								
 				
 			}
@@ -84,7 +86,7 @@
 
 		$( window ).resize(function() {
 			
-			if($('#details')){
+			if($('.details')){
 			
 				loupe.update_scale();
 			
