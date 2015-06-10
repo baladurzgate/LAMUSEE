@@ -683,19 +683,23 @@ if(!function_exists('has_text')){
 	function has_text(){
 		
 		global $post ;
-
+		
+		
 				
-			$text =  get_field('linked_text', $post->ID );
+			$texts =  get_field('linked_text', $post->ID );
+			
+			$text = $texts[0];
 				
 			if ($text && $text != "" && $text != null ){
 				
-				return true;
+				
+				if(get_post_format( $text->ID ) == 'quote' ){
+				
+					return true;
+				
+				}
 				
 			}
-			
-			print_r($text);
-		
-
 		
 		
 		return false;
@@ -709,8 +713,6 @@ if(!function_exists('has_details')){
 	function has_details(){
 		
 		global $post ;
-		
-
 				
 			$details =  get_field('image_highdef', $post->ID );
 				
