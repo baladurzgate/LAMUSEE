@@ -678,6 +678,54 @@ if(!function_exists('prepare_shape_grid')){
 }
 
 
+if(!function_exists('has_text')){
+
+	function has_text(){
+		
+		global $post ;
+
+				
+			$text =  get_field('linked_text', $post->ID );
+				
+			if ($text && $text != "" && $text != null ){
+				
+				return true;
+				
+			}
+			
+			print_r($text);
+		
+
+		
+		
+		return false;
+		
+	}
+
+}
+
+if(!function_exists('has_details')){
+
+	function has_details(){
+		
+		global $post ;
+		
+
+				
+			$details =  get_field('image_highdef', $post->ID );
+				
+			if ($details  && $details  != "" && $details  != null ){
+				
+				return true;
+				
+			}
+
+		
+		return false;
+		
+	}
+
+}
 
 if(!function_exists('fill_areas_href')){
 
@@ -748,7 +796,9 @@ if(!function_exists('collect_matching_paintings')){
 	
 	function collect_matching_paintings(){
 		
+		
 		global $post;
+		
 		
 		$post_areas_str = get_field('areas',$post->ID);
 		
