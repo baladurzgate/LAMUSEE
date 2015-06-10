@@ -3,8 +3,8 @@
 	<figure id="illustration_txt">
 		<div class = "imgborder">
 			<img src="<?php echo $image['url']; ?>"  border="0" usemap="#Map<?php echo $linked_object->ID; ?>" />
+			<?php the_carte($post); ?>
 		</div>
-		<?php the_carte($post); ?>
 	</figure>
 	
 	<div id="txt">
