@@ -126,9 +126,8 @@ b{
 
 #carte{
 	background-color: white;
-	padding-left: 12px;
-	padding-right: 12px;
-	padding-bottom: 12px;
+	outline:15px solid white;
+	margin-top:12px;
 }
 
 
@@ -136,7 +135,7 @@ b{
   width:auto;
   margin-left:40px;
   margin-right:40px;
-/* ici on positionne le conteneur Ã  un endroit fixe
+/* ici on positionne le conteneur à un endroit fixe
 	position:absolute;
 	top:12%;
 	bottom: 12%;
@@ -144,7 +143,7 @@ b{
 }
 
 #illustration_txt {
-		/* pour Ã©viter que <figure> ne possÃ¨de une marge extÃ©rieure  */
+		/* pour éviter que <figure> ne possède une marge extérieure  */
 		margin: 0;
     left: 30%;
     top:20px;
@@ -154,8 +153,15 @@ b{
 
 .imgborder{
 		/*border:solid 15px white;*/
-	background-color:white;
-	padding:10px;
+	/*padding:10px;*/
+    /*height:600px*/;
+
+		}
+		
+
+.imgborder img{
+		outline:solid 15px white;*/
+	/*padding:10px;*/
     /*height:600px*/;
 
 		}
@@ -170,19 +176,19 @@ b{
 }
 
 #illustration {
-		/* pour Ã©viter que <figure> ne possÃ¨de une marge extÃ©rieure  */
+		/* pour éviter que <figure> ne possède une marge extérieure  */
 		margin: 0;
     left: 30%;
-    /*top:20px;*/
+    top:20px;
     height:100px;
     position:absolute;
 		}
 		
 		#illustrationl {
-		/* pour Ã©viter que <figure> ne possÃ¨de une marge extÃ©rieure  */
+		/* pour éviter que <figure> ne possède une marge extérieure  */
 		margin: 0;
     left: 25%;
-    /*top:40px;*/
+    top:40px;
     height:100px;
     position:absolute;
 		}
@@ -301,6 +307,8 @@ width: 5px; }
 }
 #zone_selector{
 	outline: solid 3px red;
+width:10px;
+height:10px;
 }
 
 #zoom_frame{
@@ -319,5 +327,32 @@ width: 5px; }
 	width:200px;
 	margin-left:5%;
 	height: auto;
+	
+}
+
+
+/* SHAPE LIST PAGE */
+
+
+.shape_row{
+	
+	background-color:white;
+	width:400px;
+	padding:10px;
+	margin:20px auto;
+	
+}
+
+.shape_unlinked{
+	
+	border:2px red;
+	
+}
+
+
+.shape_name{
+	
+	font-size:18px;
+	padding:10px;
 	
 }
