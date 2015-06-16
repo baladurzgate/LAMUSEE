@@ -515,7 +515,22 @@ if(!function_exists('the_illustration')){
 		
 		$modifed_areas = $areas;
 		
+		$map_scale = get_field('map_scale',$post->ID);
 		
+		if($map_scale != ""){
+			
+			$map_scale = floatval($map_scale);
+			
+			if($map_scale == 0)$map_scale = 1;
+			
+		}else{
+			
+			$map_scale = 1;
+			
+			
+		}		
+		print_r(get_field('map_scale',$post->ID));
+
 		$text_link = add_query_arg( array( 'part' => "text" ));		
 		
 		$details_link = add_query_arg( array( 'part' => "details" ));
@@ -1006,11 +1021,26 @@ if(!function_exists('get_shape_list')){
 				
 		}
 		
-		
 		return $shape_list;
 
 	}
 
+}
+
+
+add_filter( 'manage_paintings_columns', 'paintings_columns' ) ;
+
+function paintings_columns( $columns ) {
+
+	$columns = array(
+			/*'cb' => '<input type="checkbox" />',
+			'title' => __( 'Movie' ),
+			'duration' => __( 'Duration' ),
+			'genre' => __( 'Genre' ),
+			'date' => __( 'Date' )*/
+	);
+
+	return $columns;
 }
 
 
