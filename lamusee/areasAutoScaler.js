@@ -1,17 +1,50 @@
 
 		
 			
-		function areasAutoScaler (img_selector,ratio){
+		function areasAutoScaler (img_selector,scale,offsetx,offsety){
 			
-			var ratio = ratio || 1;
+			var offsetx = offsetx || 0;
 			
-			if(document.getElementById('ratio')!== null){
+			var offsety = offsety || 0;
+			
+			var scale = scale || 1;
+			
+			if(document.getElementById('map_scale')!== null){
 				
-				ratio = jQuery('#ratio').val();
+				scale = jQuery('#map_scale').val();
 				
-				console.log('map scale = '+ratio);
+				scale = parseFloat(scale,10);
+				
+				console.log('map scale = '+scale);
 				
 			}
+			
+			if(document.getElementById('map_offset_x')!== null){
+				
+				offsetx = jQuery('#map_offset_x').val();
+				
+				offsetx = parseFloat(offsetx,10);
+				
+				console.log('map_offset_x = '+offsetx);
+				
+				
+				
+			}
+			
+			if(document.getElementById('map_offset_y')!== null){
+				
+				offsety = jQuery('#map_offset_y').val();
+				
+				offsety = parseFloat(offsety,10);
+				
+				console.log('map_offset_y = '+offsety);
+				
+				
+				
+			}
+			
+			
+	
 			
 			var image = jQuery(img_selector);
 			
@@ -30,14 +63,14 @@
 				
 				var current_width = image.width();
 				
-				if(ratio == 0){
+				if(scale == 0){
 					
-					ratio = current_width / original_width;
+					scale = current_width / original_width;
 					
 				}
 				
 				
-				console.log(ratio);
+				console.log(scale);
 					
 				var areas = jQuery(map_selector+' area');
 					
@@ -52,13 +85,27 @@
 					var coords_str =jQuery(this).attr('coords');
 					
 					coords_arr = coords_str.split(","); 
-			
-					//coords_tab = new array();
 					
-					var relative_coords = coords_arr.map(function (x) { 
+					var relative_coords = coords_arr.map(function (c,i) { 
 						
-						var coord = parseInt(x,10);
-						var relative_coord =  Math.round(coord * ratio);
+						var coord = parseInt(c,10);
+						var relative_coord =  Math.round(coord * scale);
+						
+						
+						if(i==0){
+							
+							relative_coord += offsetx;
+
+							
+						}else if(i%2!=0){
+							
+							relative_coord += offsety;
+							
+						}else{
+							
+							relative_coord += offsetx;
+
+						}
 						return relative_coord.toString();
 					})
 					
