@@ -517,6 +517,10 @@ if(!function_exists('the_illustration')){
 		
 		$map_scale = get_field('map_scale',$post->ID);
 		
+		$map_offset_x = get_field('map_offset_x',$post->ID);
+		
+		$map_offset_y = get_field('map_offset_y',$post->ID);
+		
 		if($map_scale != ""){
 			
 			$map_scale = floatval($map_scale);
@@ -528,8 +532,29 @@ if(!function_exists('the_illustration')){
 			$map_scale = 1;
 			
 			
-		}		
-		print_r(get_field('map_scale',$post->ID));
+		}	
+
+		if($map_offset_x != ""){
+				
+			$map_offset_x  = floatval($map_offset_x);
+				
+		}else{
+				
+			$map_offset_x = 0;
+				
+				
+		}
+		
+		if($map_offset_y != ""){
+				
+			$map_offset_y  = floatval($map_offset_y);
+				
+		}else{
+				
+			$map_offset_y = 0;
+				
+				
+		}
 
 		$text_link = add_query_arg( array( 'part' => "text" ));		
 		
