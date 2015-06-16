@@ -1,13 +1,22 @@
 
-		//var resp_areas = new areasScaler('#resp_img');
-		//resp_areas.update();
 		
-
-		function areasAutoScaler (img_selector){
+			
+		function areasAutoScaler (img_selector,ratio){
+			
+			var ratio = ratio || 1;
+			
+			if(document.getElementById('ratio')!== null){
+				
+				ratio = jQuery('#ratio').val();
+				
+				console.log('map scale = '+ratio);
+				
+			}
 			
 			var image = jQuery(img_selector);
 			
 			var map_attr = image.attr('usemap');
+			
 			
 			if(map_attr!=""){
 				
@@ -21,16 +30,20 @@
 				
 				var current_width = image.width();
 				
-				var ratio = current_width / original_width;
+				if(ratio == 0){
+					
+					ratio = current_width / original_width;
+					
+				}
+				
 				
 				console.log(ratio);
 					
 				var areas = jQuery(map_selector+' area');
-				
-
-			
-			
+					
 			}
+			
+			console.log('areasAutoScaler init');
 			
 			this.update = function(){
 				
