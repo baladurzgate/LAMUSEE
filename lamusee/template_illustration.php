@@ -3,7 +3,9 @@
 	<figure id="illustration">
 		<div class = "imgborder">
 			<img id = "tableau" src="<?php echo $image['url']; ?>"  border="0" usemap="#Map<?php $post->ID; ?>"/>
-			<input type="hidden" id ="ratio" value="<?php echo $map_scale;?>">
+			<input type="hidden" id ="map_scale" value="<?php echo $map_scale;?>">
+			<input type="hidden" id ="map_offset_x" value="<?php echo $map_offset_x;?>">
+			<input type="hidden" id ="map_offset_y" value="<?php echo $map_offset_y;?>">
 			<map name="Map<?php echo $linked_object->ID; ?>" id="Map<?php $post->ID; ?>">
 					<?php echo $modifed_areas; ?>
 			</map>
