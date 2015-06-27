@@ -431,6 +431,8 @@ function html5_shortcode_demo_2($atts, $content = null) // Demo Heading H2 short
     return '<h2>' . $content . '</h2>';
 }
 
+
+
 add_query_arg( 'part');
 
 if(!function_exists('remember_painting')){
@@ -723,9 +725,7 @@ if(!function_exists('has_text')){
 	function has_text(){
 		
 		global $post ;
-		
-		
-				
+			
 			$texts =  get_field('linked_text', $post->ID );
 			
 			$text = $texts[0];
@@ -740,7 +740,6 @@ if(!function_exists('has_text')){
 				}
 				
 			}
-		
 		
 		return false;
 		
@@ -762,7 +761,6 @@ if(!function_exists('has_details')){
 				
 			}
 
-		
 		return false;
 		
 	}
@@ -838,9 +836,7 @@ if(!function_exists('collect_matching_paintings')){
 	
 	function collect_matching_paintings(){
 		
-		
 		global $post;
-		
 		
 		$post_areas_str = get_field('areas',$post->ID);
 		
@@ -950,8 +946,6 @@ if(!function_exists('history_list')){
 		 
 		echo $_SESSION['couleur'];
 		
-		
-		
 	}
 	
 }
@@ -1015,7 +1009,6 @@ if(!function_exists('get_shape_list')){
 							
 							$treated_shapes[$shape] = true;
 
-							
 						}
 				
 					}
@@ -1052,6 +1045,33 @@ if(!function_exists('get_shape_list')){
 
 }
 
+if(!function_exists('get_random_painting')){
+	
+	function get_random_painting(){
+		
+		$query = array( 'post_status' => 'publish','numberposts' => -1 , 'format' => 'image' );
+	
+		$all_published_paintings = get_posts($query);
+		
+		return $all_published_paintings[array_rand($all_published_paintings)];
+		
+	}
+
+}
+
+
+function random_painting_link( $atts, $content = null ) {
+	
+	$rdp = get_random_painting();
+	
+	return '<a href = "'.get_permalink( $rdp->ID).'">' . $content . '</a>';
+	
+}
+
+add_shortcode( 'random_painting_link', 'random_painting_link' );
+
+/*
+
 
 add_filter( 'manage_paintings_columns', 'paintings_columns' ) ;
 
@@ -1062,7 +1082,7 @@ function paintings_columns( $columns ) {
 			'title' => __( 'Movie' ),
 			'duration' => __( 'Duration' ),
 			'genre' => __( 'Genre' ),
-			'date' => __( 'Date' )*/
+			'date' => __( 'Date' )
 	);
 
 	return $columns;
@@ -1071,7 +1091,7 @@ function paintings_columns( $columns ) {
 
 
 
-
+*/
 
 
 
