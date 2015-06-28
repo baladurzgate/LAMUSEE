@@ -9,8 +9,10 @@
 		<!-- article -->
 		<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 		
+			<div id = "load_gif"> chargement... </div>
 		
-			<div id="conteneur">
+		
+			<div id="conteneur" style = "display:none;">
 
 
 			<!-- post title -->
