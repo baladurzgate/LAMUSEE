@@ -4,7 +4,7 @@ http://lamusee.fr/?p=221
 -St Jérôme Etude (gravure)
 http://lamusee.fr/?p=159
 
--Amour victorieux 
+-Amour victorieux ->OK
 http://lamusee.fr/?p=126
 
 extase sainte cecile
