@@ -7,9 +7,9 @@ http://lamusee.fr/?p=159
 -Amour victorieux ->OK
 http://lamusee.fr/?p=126
 
-extase sainte cecile
+extase sainte cecile ->OK
 
-l'amour victorieux
+
 
 la libération d'andromède
 
@@ -27,4 +27,4 @@ deposition
 
 Nox -> OK 
 
-portarait de luca Paoli
+portarait de luca Paoli -> OK 
