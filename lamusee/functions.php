@@ -568,7 +568,7 @@ if(!function_exists('the_illustration')){
 		
 		$paintings_list = collect_matching_paintings();
 		
-		choose_random_elem_in($paintings_list);
+		choose_painting_in($paintings_list);
 
 		foreach ($paintings_list as $shape_name => $painting_id){
 			
@@ -796,11 +796,85 @@ if(!function_exists('fill_areas_href')){
 
 }
 
+if(!function_exists('remove_visited')){
+
+	function remove_visited($arr){
+		
+		$visited_paintings = get_visited_paintings();
+		
+		foreach ($visited_paintings as $vp){
+			
+			foreach ($arr as $key => $p){
+			
+				if($p == $vp){
+					
+					if(count($arr)>1){
+						
+						unset($arr[$key]);
+					
+					}
+						
+				}
+			
+			}
+			
+		}
+		
+		
+	}
+
+}
+
+if(!function_exists('choose_painting_in')){
+
+	function choose_painting_in($strclass){
+
+		$visited_paintings = get_visited_paintings();
+		
+		$memroy_cursor = 0;
+		
+		if(isset($strclass)){
+			
+			foreach ($strclass as $key => $list){
+				
+				remove_visited($list);
+				
+			}
+
+			foreach ($strclass as $key => $list){
+
+				if(count($list)>1){
+
+					$random_index = array_rand( $list);
+
+					$random_elem =  $list[$random_index];
+
+					$strclass->$key  = $random_elem;
+
+				}else if(count($list)==1){
+						
+					$strclass->$key  = $list[0];
+						
+				}else{
+						
+					unset($strclass->$key);
+						
+				}
+
+			}
+
+		}
+
+		return false;
+
+	}
+
+}
 
 if(!function_exists('choose_random_elem_in')){
 
 	function choose_random_elem_in($strclass){
-
+		
 		if(isset($strclass)){
 				
 			foreach ($strclass as $key => $list){
@@ -855,56 +929,26 @@ if(!function_exists('collect_matching_paintings')){
 		
 		$all_published_posts = get_posts($query);
 		
-		$visited_paintings = get_visited_paintings();
-		
-
+		$memory = 2;
 		
 		foreach ( $all_published_posts as $other_post ) {
 			
 			if($other_post->ID != $post->ID){
 				
-				$was_recently_visited = false;
+				$other_post_areas_str = get_post_meta($other_post->ID, 'areas', true);
 				
-				$memory = 1;
+				$other_post_shapes = collect_shapes($other_post_areas_str);
 				
-				if($visited_paintings != false ){
-						
-					foreach ($visited_paintings as $key => $vp){
-						
-						if($key < $memory){
-							
-							if($vp == $other_post->ID){
-								
-								$was_recently_visited = true;
-								
-							}
-							
-						}
-						
-					}
-						
-						
-				}
+				$other_post_grid = prepare_shape_grid($other_post_shapes);
 				
-				if($was_recently_visited == false){
-				
-			
-					$other_post_areas_str = get_post_meta($other_post->ID, 'areas', true);
-					
-					$other_post_shapes = collect_shapes($other_post_areas_str);
-					
-					$other_post_grid = prepare_shape_grid($other_post_shapes);
-					
-					foreach ( $id_grid as $shape_name => $ids){
-	
-						if(isset($other_post_grid->$shape_name)){
+				foreach ( $id_grid as $shape_name => $ids){
 
-							array_push($id_grid->$shape_name,$other_post->ID);
-							
-						}
-		
+					if(isset($other_post_grid->$shape_name)){
+
+						array_push($id_grid->$shape_name,$other_post->ID);
+						
 					}
-				
+	
 				}
 			
 			}
@@ -1070,6 +1114,17 @@ function random_painting_link( $atts, $content = null ) {
 	return '<a href = "'.get_permalink( $rdp->ID).'">' . $content . '</a>';
 	
 }
+
+
+function filter_only_paintings($where = '') {
+	
+	$where .= " format >= 'image'";
+	
+	return $where;
+	
+	
+}
+
 
 add_shortcode( 'random_painting_link', 'random_painting_link' );
 
