@@ -569,6 +569,8 @@ if(!function_exists('the_illustration')){
 		$paintings_list = collect_matching_paintings();
 		
 		choose_painting_in($paintings_list);
+		
+		//choose_random_elem_in($paintings_list);
 
 		foreach ($paintings_list as $shape_name => $painting_id){
 			
@@ -796,30 +798,45 @@ if(!function_exists('fill_areas_href')){
 
 }
 
+
 if(!function_exists('remove_visited')){
 
 	function remove_visited($arr){
 		
 		$visited_paintings = get_visited_paintings();
 		
-		foreach ($visited_paintings as $vp){
+		if($visited_paintings ){
 			
-			foreach ($arr as $key => $p){
-			
-				if($p == $vp){
+			if(count($arr)>1){
+				
+				for ($j = 0 ; $j < count($arr); $j++){
 					
-					if(count($arr)>1){
-						
-						unset($arr[$key]);
-					
+					foreach ($arr as $key => $p){
+							
+						if($p == $visited_paintings[$j]){
+								
+							//echo '<br>';
+							//echo 'removing '.$p;
+							
+							if(count($arr)>1){
+								
+								unset($arr[$key]);
+								array_values($arr);
+							
+							}
+							
+								
+						}
+							
 					}
-						
+				
 				}
-			
-			}
-			
+				
+			}	
+				
 		}
 		
+		return $arr;
 		
 	}
 
@@ -831,19 +848,13 @@ if(!function_exists('choose_painting_in')){
 
 		$visited_paintings = get_visited_paintings();
 		
-		$memroy_cursor = 0;
-		
 		if(isset($strclass)){
-			
-			foreach ($strclass as $key => $list){
-				
-				remove_visited($list);
-				
-			}
 
 			foreach ($strclass as $key => $list){
 
 				if(count($list)>1){
+					
+					$list = remove_visited($list);
 
 					$random_index = array_rand( $list);
 
@@ -931,9 +942,13 @@ if(!function_exists('collect_matching_paintings')){
 		
 		$memory = 2;
 		
+		$visited_paintings = get_visited_paintings();
+		
 		foreach ( $all_published_posts as $other_post ) {
 			
 			if($other_post->ID != $post->ID){
+				
+				$recently_visited = false;
 				
 				$other_post_areas_str = get_post_meta($other_post->ID, 'areas', true);
 				
@@ -944,8 +959,26 @@ if(!function_exists('collect_matching_paintings')){
 				foreach ( $id_grid as $shape_name => $ids){
 
 					if(isset($other_post_grid->$shape_name)){
+							
+						/*			for ($j = 0 ; $j < 1 ; $j++){
+										
+										if($visited_paintings[$j]==$other_post->ID){
+											
+											$recently_visited = true;
 
-						array_push($id_grid->$shape_name,$other_post->ID);
+											break;
+	
+										}
+											
+										
+											
+									}*/
+						
+						//if(!$recently_visited){
+
+							array_push($id_grid->$shape_name,$other_post->ID);
+						
+						//}
 						
 					}
 	
