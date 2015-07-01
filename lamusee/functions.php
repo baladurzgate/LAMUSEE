@@ -1,8 +1,19 @@
 <?php
 /*
+	html5blank:
+	
  *  Author: Todd Motto | @toddmotto
  *  URL: html5blank.com | @html5blank
  *  Custom functions, support, custom post types and more.
+ 
+ 	lamuse theme : 
+ 	
+ 	graphic-designer/contributor : Raoul Bonaffe
+ 	developper/admin-system : Alexandre Cormier
+ 	
+ 	
+ 
+ 
  */
 
 /*------------------------------------*\
