@@ -1129,9 +1129,18 @@ if(!function_exists('get_random_painting')){
 	
 	function get_random_painting(){
 		
-		$query = array( 'post_status' => 'publish','numberposts' => -1 , 'format' => 'image' );
-	
-		$all_published_paintings = get_posts($query);
+		$args = array(
+				'post_type' => 'post',
+				'post_status' => 'publish',
+				'tax_query' => array( array(
+						'taxonomy' => 'post_format',
+						'field' => 'slug',
+						'terms' => array('post-format-image'),
+				) )
+		);
+		
+		
+		$all_published_paintings = get_posts($args);
 		
 		return $all_published_paintings[array_rand($all_published_paintings)];
 		
