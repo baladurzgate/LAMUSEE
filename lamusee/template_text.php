@@ -8,9 +8,11 @@
 	</figure>
 	
 	<div id="txt">
-		<?php echo $text; ?>
+		<div id="txt-content">
+			<?php echo $text; ?>
+		</div>
 	</div>
 	
 	<div class="fils-left">
-		<div class="slide-left"><a href="<?php echo $history_link; ?>">â–²<br>historique</a></div>';
+		<div class="slide-left"><a href="<?php echo $history_link; ?>">▲<br>historique</a></div>';
 	</div>
