@@ -55,6 +55,20 @@
 			    
 			 
 			    refresh_history();
+				
+				
+				$("#txt").mCustomScrollbar({
+					
+					axis:"y",
+					theme:"dark",
+					scrollInertia:1,
+					autoHideScrollbar: true,
+					alwaysShowScrollbar: 0,
+					scrollbarPosition: "inside"
+					
+					
+					
+				});
 			    
 
 		});
