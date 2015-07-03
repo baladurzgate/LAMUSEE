@@ -1,24 +1,33 @@
 @font-face {
+	
     font-family: fira;
     src: url(fonts/FiraSans-Book.otf);
+	
 }
 @font-face {
+	
 	font-family: ital;
 	src: url(fonts/FiraSans-BookItalic.otf);
-	}
+	
+}
 
 @font-face {
+	
 	font-family: bold;
 	src: url(fonts/FiraSans-Bold.otf);
-	}
+	
+}
 
 body {
+	
 	font-size: 14px;
 	font-family: fira;
 	background-image: url("fond.jpg");
-	}
+	
+}
 
 .but-menu {
+	
   text-transform: uppercase;
   text-align:center;
   margin:0px;
@@ -32,71 +41,107 @@ body {
   -webkit-column-gap:19px;
   -o-column-gap:19px;
   column-gap:19px;
+  
 }
-		.col-left{
-			top: 35px;
-			left: 12%;
-			background: white;
-			width:120px;
-			text-align:center;
-			position:absolute;
-			outline: 15px solid white;
-	}
+
+.col-left{
+	
+	top: 35px;
+	left: 12%;
+	background: white;
+	width:120px;
+	text-align:center;
+	position:absolute;
+	outline: 15px solid white;
+	
+}
 
 #history{
-			margin-top:20px;
-			color: gray
-		}
+	
+	margin-top:20px;
+	color: gray
+			
+}
 
 #txt{
-			position : absolute;
-			top:25px;
-			left : 2%;
-			height: 600px;
-			background : white;
-			width: 320px;
-			padding: 10px;
-			padding-left: 4px;
-			overflow-x: scroll;
-			overflow-x:hidden;
-			font-size: 14.5px;
-			line-height: 26px;
-			
-		}
+	
+	position : absolute;
+	outline : solid 15px white;
+	left : 2%;
+	height: 600px;
+	background : white;
+	width: 320px;
+	/*padding: 20px;
+	padding-left: 10px;*/
+	overflow:hidden;
+	font-size: 14.5px;
+	line-height: 26px;
+	
+}
+
+#txt-content{
+
+	background : white;
+	overflow:hidden;
+	width: 300px;
+	font-size: 14.5px;
+	line-height: 26px;
+	
+}
+
+.fond_blanc{
 		
-		#txt3{
-			position : absolute;
-			top:40px;
-			left : 2%;
-			height: 225px;
-			background : white;
-			width: 320px;
-			padding: 10px;
-			padding-left: 4px;
-			overflow-x: scroll;
-			overflow-x:hidden;
-			font-size: 12px;
-			line-height: 18px;
-			
-			
-		}
+	background-color: white;
+	padding: 10 px;
+	font-size: 14.5px;
+	line-height: 26px;
+
+}
+
+.center_1280{
+	
+	position: absolute;
+	width:100%;
+	width-max:1280 px;
+	margin: 0 auto;
+
+
+}
 		
-				#txt4{
-			position : absolute;
-			top:320px;
-			left : 2%;
-			height: 405px;
-			background : white;
-			width: 320px;
-			padding: 10px;
-			padding-left: 4px;
-			overflow-x: scroll;
-			overflow-x:hidden;
-			font-size: 12px;
-			line-height: 18px;
-			
-			
-		}
+#txt3{
+	
+	position : absolute;
+	top:40px;
+	left : 2%;
+	height: 225px;
+	background : white;
+	width: 320px;
+	padding: 10px;
+	padding-left: 4px;
+	overflow-x: scroll;
+	overflow-x:hidden;
+	font-size: 12px;
+	line-height: 18px;
+	
+	
+}
+		
+#txt4{
+	
+	position : absolute;
+	top:320px;
+	left : 2%;
+	height: 405px;
+	background : white;
+	width: 320px;
+	padding: 10px;
+	padding-left: 4px;
+	overflow-x: scroll;
+	overflow-x:hidden;
+	font-size: 12px;
+	line-height: 18px;
+
+}
 		
 		
 		
@@ -124,9 +169,16 @@ b{
 
 	}
 
+/* OLD CSS #carte{
+	background-color: white;
+	padding-left: 12px;
+	padding-right: 12px;
+	padding-bottom: 12px;
+}*/
+
 #carte{
 	background-color: white;
-	outline:15px solid white;
+	outline:16px solid white;
 	margin-top:12px;
 }
 
@@ -193,6 +245,23 @@ b{
     position:absolute;
 		}
 
+#illustration_accueil {
+		/* pour éviter que <figure> ne possède une marge extérieure  */
+		margin: 0;
+ 
+    left: 40%;
+    top: 20px;
+    height:100px;
+position:absolute;
+   
+}
+
+#tableau{
+
+	width:100%;
+	max-width:920px;
+
+}
 
 
 
@@ -329,8 +398,6 @@ height:10px;
 	height: auto;
 	
 }
-
-
 /* SHAPE LIST PAGE */
 
 
@@ -343,16 +410,16 @@ height:10px;
 	
 }
 
-.shape_unlinked{
-	
-	border:2px red;
-	
-}
-
-
 .shape_name{
 	
 	font-size:18px;
 	padding:10px;
 	
 }
+
+.shape_unlinked{
+	
+	border:solid 2px blue;
+	
+}
+
