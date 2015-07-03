@@ -1,19 +1,8 @@
 <?php
 /*
-	html5blank:
-	
  *  Author: Todd Motto | @toddmotto
  *  URL: html5blank.com | @html5blank
  *  Custom functions, support, custom post types and more.
- 
- 	lamuse theme : 
- 	
- 	graphic-designer/contributor : Raoul Bonaffe
- 	developper/admin-system : Alexandre Cormier
- 	
- 	
- 
- 
  */
 
 /*------------------------------------*\
@@ -118,6 +107,9 @@ function html5blank_header_scripts()
         
         wp_register_script('jquery', get_template_directory_uri() . '/js/lib/jquery.js', array()); // jquery
         wp_enqueue_script('jquery'); 
+		
+        wp_register_script('mcustomscrollbar', get_template_directory_uri() . '/js/lib/jquery.mCustomScrollbar.concat.min.js', array('jquery')); // Custom scripts
+        wp_enqueue_script('mcustomscrollbar');
 
         wp_register_script('loupe', get_template_directory_uri() . '/js/lib/Loupe.js', array('jquery')); // jquery
         wp_enqueue_script('loupe');
@@ -148,6 +140,9 @@ function html5blank_styles()
 {
     wp_register_style('normalize', get_template_directory_uri() . '/normalize.css', array(), '1.0', 'all');
     wp_enqueue_style('normalize'); // Enqueue it!
+	
+    wp_register_style('scrollbar', get_template_directory_uri() . '/jquery.mCustomScrollbar.css', array(), '1.0', 'all');
+    wp_enqueue_style('scrollbar'); // Enqueue it!
 
     wp_register_style('html5blank', get_template_directory_uri() . '/style.css', array(), '1.0', 'all');
     wp_enqueue_style('html5blank'); // Enqueue it!
@@ -1149,7 +1144,6 @@ if(!function_exists('get_random_painting')){
 						'terms' => array('post-format-image'),
 				) )
 		);
-		
 		
 		$all_published_paintings = get_posts($args);
 		
