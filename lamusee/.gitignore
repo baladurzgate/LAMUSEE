@@ -3,5 +3,15 @@
 
 # But not these files...
 !.gitignore
-!lamusee/
-
+!js/
+!functions.php
+!single.php
+!style.css
+!loop.php
+!template_shape_list.php
+!template_carte.php
+!template_details.php
+!template_illustration.php
+!template_painting_list.php
+!template_random_painting.php
+!template_text.php
