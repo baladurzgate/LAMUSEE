@@ -3,7 +3,9 @@
 
 # But not these files...
 !.gitignore
-!js/
+!js/scripts.js
+!js/lib/Loupe.js
+!js/lib/areasAutoScaler.js
 !functions.php
 !single.php
 !style.css
