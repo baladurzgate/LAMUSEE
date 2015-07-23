@@ -575,8 +575,6 @@ if(!function_exists('the_illustration')){
 		$paintings_list = collect_matching_paintings();
 		
 		choose_painting_in($paintings_list);
-		
-		//choose_random_elem_in($paintings_list);
 
 		foreach ($paintings_list as $shape_name => $painting_id){
 			
@@ -821,9 +819,6 @@ if(!function_exists('remove_visited')){
 							
 						if($p == $visited_paintings[$j]){
 								
-							//echo '<br>';
-							//echo 'removing '.$p;
-							
 							if(count($arr)>1){
 								
 								unset($arr[$key]);
@@ -917,9 +912,6 @@ if(!function_exists('choose_random_elem_in')){
 			}
 
 		}
-		
-
-
 		return false;
 
 	}
@@ -965,26 +957,8 @@ if(!function_exists('collect_matching_paintings')){
 				foreach ( $id_grid as $shape_name => $ids){
 
 					if(isset($other_post_grid->$shape_name)){
-							
-						/*			for ($j = 0 ; $j < 1 ; $j++){
-										
-										if($visited_paintings[$j]==$other_post->ID){
-											
-											$recently_visited = true;
 
-											break;
-	
-										}
-											
-										
-											
-									}*/
-						
-						//if(!$recently_visited){
-
-							array_push($id_grid->$shape_name,$other_post->ID);
-						
-						//}
+						array_push($id_grid->$shape_name,$other_post->ID);
 						
 					}
 	
@@ -1052,6 +1026,41 @@ if(!function_exists('the_carte')){
 			include(locate_template('template_carte.php'));
 		
 		}
+
+	}
+
+}
+
+if(!function_exists('get_shapes')){
+
+	function get_shape_list($post){
+		
+		$post_areas_str = get_field('areas',$post->ID);
+		$post_shapes = collect_shapes($post_areas_str);
+		
+		return $post_shapes;
+		
+	}
+	
+}
+
+if(!function_exists('the_shapes')){
+
+	function the_shapes(){
+
+		global $post;
+		
+		$shapes = get_shape_list($post);
+		
+		echo '<ul class = "painting_shape_list">'."\n";
+		
+		foreach ($shapes as $shape){
+			
+			echo "<li class = 'listed_shape'>".$shape.'</li>'."\n";
+			
+		}
+		
+		echo'</ul>'."\n";
 
 	}
 
