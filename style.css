@@ -423,3 +423,35 @@ height:10px;
 	
 }
 
+.listed_painting{
+	
+	background-color:white;
+	width:100%;
+	max-width:350px;
+	padding:14px;
+	margin:16px;
+}
+
+.listed_painting_title{
+	
+	outline : solid 1px;
+	padding:10px;
+	margin-bottom:12px;
+}
+
+.listed_painting_artist{
+	
+
+}
+
+.painting_shape_list{
+	
+	
+}
+
+.listed_shape{
+	
+}
+
+
+
