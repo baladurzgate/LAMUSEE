@@ -1033,7 +1033,7 @@ if(!function_exists('the_carte')){
 
 if(!function_exists('get_shapes')){
 
-	function get_shape_list($post){
+	function get_shapes($post){
 		
 		$post_areas_str = get_field('areas',$post->ID);
 		$post_shapes = collect_shapes($post_areas_str);
