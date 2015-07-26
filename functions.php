@@ -1050,7 +1050,7 @@ if(!function_exists('the_shapes')){
 
 		global $post;
 		
-		$shapes = get_shape_list($post);
+		$shapes = get_shapes($post);
 		
 		echo '<ul class = "painting_shape_list">'."\n";
 		
