@@ -660,6 +660,100 @@ if(!function_exists('the_details')){
 
 }
 
+if(!function_exists('the_editor')){
+
+	function the_editor($otherpost=null){
+
+		if($otherpost!=null){
+
+			$post = $otherpost;
+
+		}else{
+
+			global $post;
+
+		}
+
+		$post_url = get_permalink( $post->ID);
+
+		$image = get_field('lowres_image',$post->ID);
+			
+		$areas = get_field('areas',$post->ID);
+
+		$image_highres = get_field('image_highres',$post->ID);
+
+		$modifed_areas = $areas;
+
+		$map_scale = get_field('map_scale',$post->ID);
+
+		$map_offset_x = get_field('map_offset_x',$post->ID);
+
+		$map_offset_y = get_field('map_offset_y',$post->ID);
+
+		if($map_scale != ""){
+				
+			$map_scale = floatval($map_scale);
+				
+			if($map_scale == 0)$map_scale = 1;
+				
+		}else{
+				
+			$map_scale = 1;
+				
+				
+		}
+
+		if($map_offset_x != ""){
+
+			$map_offset_x  = floatval($map_offset_x);
+
+		}else{
+
+			$map_offset_x = 0;
+
+
+		}
+
+		if($map_offset_y != ""){
+
+			$map_offset_y  = floatval($map_offset_y);
+
+		}else{
+
+			$map_offset_y = 0;
+
+
+		}
+
+		$text_link = add_query_arg( array( 'part' => "text" ));
+
+		$details_link = add_query_arg( array( 'part' => "details" ));
+
+
+		$paintings_list = collect_matching_paintings();
+
+		choose_painting_in($paintings_list);
+
+		foreach ($paintings_list as $shape_name => $painting_id){
+				
+			$url = get_permalink($painting_id);
+
+			$modifed_areas = fill_areas_href($modifed_areas,$shape_name,$url);
+
+		}
+
+		remember_painting();
+
+		remember_shape();
+
+		include(locate_template('template_editor.php'));
+
+
+	}
+
+}
+
+
 if(!function_exists('zoom_link')){
 
 	function zoom_link($text){

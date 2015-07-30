@@ -48,6 +48,12 @@
 											
 									break;
 									
+									case 'edit':
+											
+										the_editor();
+											
+									break;
+									
 								}
 								
 							}else{
