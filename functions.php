@@ -122,6 +122,9 @@ function html5blank_header_scripts()
         
         wp_register_script('html5blankscripts', get_template_directory_uri() . '/js/scripts.js', array('jquery'), '1.0.0'); // Custom scripts
         wp_enqueue_script('html5blankscripts');
+        
+        wp_register_script('areasEditor', get_template_directory_uri() . '/js/lib/areasEditor.js', array('jquery'), '1.0.0'); // Conditional script(s)
+        wp_enqueue_script('areasEditor'); // Enqueue it!
                 
     }
 }
@@ -133,6 +136,7 @@ function html5blank_conditional_scripts()
         wp_register_script('scriptname', get_template_directory_uri() . '/js/scriptname.js', array('jquery'), '1.0.0'); // Conditional script(s)
         wp_enqueue_script('scriptname'); // Enqueue it!
     }
+
 }
 
 // Load HTML5 Blank styles
@@ -144,8 +148,11 @@ function html5blank_styles()
     wp_register_style('scrollbar', get_template_directory_uri() . '/jquery.mCustomScrollbar.css', array(), '1.0', 'all');
     wp_enqueue_style('scrollbar'); // Enqueue it!
 
-    wp_register_style('html5blank', get_template_directory_uri() . '/style.css', array(), '1.0', 'all');
-    wp_enqueue_style('html5blank'); // Enqueue it!
+    wp_register_style('lamusee', get_template_directory_uri() . '/style.css', array(), '1.0', 'all');
+    wp_enqueue_style('lamusee'); // Enqueue it!
+    
+    wp_register_style('areasEditor', get_template_directory_uri() . '/areasEditor_style.css', array(), '1.0', 'all');
+    wp_enqueue_style('areasEditor'); // Enqueue it!
 }
 
 // Register HTML5 Blank Navigation
@@ -770,7 +777,7 @@ if(!function_exists('zoom_link')){
 
 }
 
-if(!function_exists('convert_shapes')){
+if(!function_exists('collect_shapes')){
 	
 	function collect_shapes($str){
 		
