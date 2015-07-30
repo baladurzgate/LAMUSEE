@@ -660,9 +660,9 @@ if(!function_exists('the_details')){
 
 }
 
-if(!function_exists('the_editor')){
+if(!function_exists('the_areas')){
 
-	function the_editor($otherpost=null){
+	function the_areas($otherpost=null){
 
 		if($otherpost!=null){
 
@@ -746,7 +746,7 @@ if(!function_exists('the_editor')){
 
 		remember_shape();
 
-		include(locate_template('template_editor.php'));
+		include(locate_template('template_areas.php'));
 
 
 	}

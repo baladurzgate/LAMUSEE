@@ -48,9 +48,9 @@
 											
 									break;
 									
-									case 'edit':
+									case 'areas':
 											
-										the_editor();
+										the_areas();
 											
 									break;
 									
