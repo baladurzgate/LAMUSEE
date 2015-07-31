@@ -924,24 +924,14 @@ if(!function_exists('remove_visited')){
 								
 								unset($arr[$key]);
 								array_values($arr);
-							
-							}
-							
-								
-						}
-							
+							}	
+						}	
 					}
-				
 				}
-				
-			}	
-				
+			}		
 		}
-		
 		return $arr;
-		
 	}
-
 }
 
 if(!function_exists('choose_painting_in')){

@@ -229,7 +229,11 @@ function Areas_Editor(){
 			
 		});
 		
+		import_areas();
+		
 		setMode("polygon");
+		
+		update_canvas();
 		
 	}
 	
@@ -327,10 +331,10 @@ function Areas_Editor(){
 		var narea = new Area(_name,_coords,acount);
 		
 		areas.unshift(narea);
-		deselect_all();
+		//deselect_all();
 		acount++;
 		
-		update_canvas();
+		//update_canvas();
 		
 	}
 	
@@ -555,21 +559,7 @@ function Areas_Editor(){
 		
 	}
 	
-	// DATA__________________________________________________________
-	
-	function update_post(){
-			
-		jQuery.ajax({
-			type: "POST",
-			url: "update_post_areas.php",
-			data: "post_id=" + name + "&post_areas=" + link ,
-			cache: true,
-			success: function(data) {
-				alert("success!");
-			}
-		});
-			
-	}
+
 	
 
 
@@ -626,6 +616,72 @@ function Areas_Editor(){
 		
 	}
 	
+	// DATA__________________________________________________________
+	
+	function update_post(){
+			
+		jQuery.ajax({
+			type: "POST",
+			url: "update_post_areas.php",
+			data: "post_id=" + name + "&post_areas=" + link ,
+			cache: true,
+			success: function(data) {
+				alert("success!");
+			}
+		});
+			
+	}
+	
+	function convert_to_html(){
+		
+		var html = "";
+	
+		for (var i = 0 ; i < areas.length ; i ++){
+		
+			var coords = areas[i].getCoords('string');
+			var name = areas[i].getName();
+		
+			var line =  '<area shape="poly" coords="'+coords+'" href="#'+name+'" alt="'+name+'" title = "'+name+'">'+"\n";
+			html+=line;
+		
+		}
+	
+		return html;
+	
+	}
+	
+	function import_areas(){
+	
+		jQuery('[ae_id="source_areas"] > area').each(function(i,j){
+			var name = jQuery(this).attr( "title" );
+			var coords = jQuery(this).attr( "coords" ).split(',');
+			var clean_coords = [];
+			var iarea = new Area('imported_area'+i,new Array());
+			
+			for (var c = 0 ; c < coords.length ; c++) {
+			
+				if(c == 1){
+					
+					iarea.addPoint(parseInt(coords[0]),parseInt(coords[1]))
+				
+				}else if(c > 1 && c < coords.length-1 && c % 2 == 0){
+				
+					iarea.addPoint(parseInt(coords[c]) ,parseInt(coords[c+1]));			
+				
+				}else if(c == coords.length-1){
+				
+					iarea.addPoint(parseInt(coords[coords.length-2]) ,parseInt(coords[coords.length-1]));			
+					
+				}
+			
+			}
+			add_area(name,iarea.getCoords());
+		});		
+	
+	
+	}
+
+	
 	//---------------------------------------------------------------------------------------------------
 	//------------------------------------------SUB CLASS AREA-------------------------------------------
 	//---------------------------------------------------------------------------------------------------
@@ -655,6 +711,23 @@ function Areas_Editor(){
 			switch (type){
 			
 				case 'string':
+					
+					var str = "";
+					
+					for(var i = 0 ; i < coords.length ; i ++){
+					
+						if(i<coords.length-1){
+						
+							str+=coords[i].x+','+coords[i].y+','
+						
+						}else if(i == coords.length-1){
+						
+							str+=coords[i].x+','+coords[i].y;
+						}
+					
+					}
+					
+					return str;
 				
 				break;
 				
@@ -780,7 +853,6 @@ function Areas_Editor(){
 					
 				break;
 			}
-		
 
 			ctx.moveTo(coords[0].x,coords[0].y);
 			

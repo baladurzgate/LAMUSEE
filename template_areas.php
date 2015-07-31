@@ -11,7 +11,7 @@
 				<input type="hidden" id ="map_offset_x" value="<?php echo $map_offset_x;?>">
 				<input type="hidden" id ="map_offset_y" value="<?php echo $map_offset_y;?>">
 				<input type="hidden" id ="post_id" value="<?php echo $post->ID;?>">
-				<div id="areas">
+				<div id="areas" ae_id = "source_areas" >
 						<?php echo $modifed_areas; ?>
 				</div>
 			</div>
