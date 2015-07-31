@@ -1,17 +1,17 @@
 
 
 //---------------------------------------------------------------------------------------------------
-//------------------------------------------CLASS AREA_EDITOR-------------------------------------------
+//------------------------------------------CLASS AREA_EDITOR----------------------------------------
 //---------------------------------------------------------------------------------------------------
 
 
 function Areas_Editor(){
 	
-	//PRIVATE VARS
+	//PRIVATE VARS__________________________________________________________
 	
 	var canvas,ctx,img,left,center,right;
 	var tools,areas_list,modes,property;
-	var bt_add,bt_update,bt_polygon,bt_edit,bt_polygon;
+	var bt_add,bt_update,bt_polygon,bt_polygon;
 	var input_name;
 	var areas = new Array();
 	var mousedown = false;
@@ -22,9 +22,11 @@ function Areas_Editor(){
 	var pcount = 0;
 	var polygon = new Area('unborn',new Array(),00);
 	
-	// INIT 
+	// INIT__________________________________________________________ 
 	
 	this.init = function(_img,_left,_center,_right){
+		
+		//INIT_VARS
 	
 		img = document.getElementById(_img);
 		left = jQuery(_left);
@@ -48,24 +50,14 @@ function Areas_Editor(){
 		
 		ctx.drawImage(img,0,0);
 		
-		// mode panel
+		//EVENTS__________________________________________________________
+		
+		// mode panel_______________________
 				
 		modes = jQuery('<div/>', {
 			ae_id: 'modes_panel',
 			class:'ae_sub_panel'
 		}).appendTo(left);
-		
-		bt_edit = jQuery('<button/>', {
-			ae_id: "bt_edit",
-			text:"editer",
-			class:'ae_bt mode',
-		}).appendTo(modes);
-		
-		jQuery(bt_edit).click(function(event){
-			
-			setMode("edit");
-			
-		})
 		
 		bt_polygon = jQuery('<button/>', {
 			ae_id: "bt_polygon",
@@ -79,7 +71,7 @@ function Areas_Editor(){
 			
 		})
 
-		// property panel
+		// property panel_______________________
 		
 		property = jQuery('<div/>', {
 			ae_id: 'property_panel',
@@ -88,16 +80,18 @@ function Areas_Editor(){
 		
 		label_name = jQuery('<span/>', {
 			ae_id: 'label_name',
-			text:"area"+areas.length,
+			text:"new_area"+acount,
 			class:'ae_label',
 		}).appendTo(property);
 		
 		input_name = jQuery('<input/>', {
 			ae_id: 'input_name',
 			type:'text',
-			value:"area"+areas.length,
+			value:"new_area"+acount,
 			class:'ae_input',
 		}).appendTo(property);
+		
+		//ADD_______________________
 		
 		bt_add = jQuery('<button/>', {
 			ae_id: "bt_add",
@@ -108,14 +102,13 @@ function Areas_Editor(){
 		jQuery(bt_add).click(function( event ) {
 			
 			add_area(input_name.val(),polygon.getCoords().slice());
-			ctx.drawImage(img,0,0);
-			draw_areas();
-			input_name.val("area"+acount);
-			polygon = new Area('unborn',new Array(),00);
 			property.hide();
 			update_listed_areas();
+			init_property();
 
 		});
+		
+		//UPDATE_______________________
 		
 		bt_update = jQuery('<button/>', {
 			ae_id: "bt_update",
@@ -127,9 +120,13 @@ function Areas_Editor(){
 			
 			if(selected_area != undefined){
 				update_area(selected_area.getID(),input_name.val());
+				setMode('polygon');
+				init_property();
 			}
 
 		});
+		
+		//UNDO_______________________
 		
 		bt_undo = jQuery('<button/>', {
 			ae_id: "bt_undo",
@@ -144,7 +141,7 @@ function Areas_Editor(){
 
 		});
 		
-		// layout panel
+		// layout panel_______________________
 		
 		areas_list = jQuery('<div/>', {
 			ae_id: 'layout_panel',
@@ -152,42 +149,14 @@ function Areas_Editor(){
 		}).appendTo(right);
 		
 		
-		// canvas
+		// canvas_______________________
 	
-		jQuery(canvas).mousemove(function( event ) {
+		jQuery('body').mousemove(function( event ) {
 		
 			mx = event.pageX - jQuery(canvas).offset().left;
 			my = event.pageY- jQuery(canvas).offset().top;
 			
 			update_canvas();
-	
-			switch (mode){
-			
-				case 'polygon' : 
-				
-				break;
-			
-				case "edit" : 
-					
-					if(mousedown){
-					
-						var spoint = selected_area.selected_point;
-						
-						if(spoint){
-							
-							spoint.x = mx;
-							spoint.y = my;
-							
-						}
-					
-					}
-
-				break;
-			}
-			
-		
-		
-						
 
 		});
 
@@ -233,12 +202,6 @@ function Areas_Editor(){
 			mousedown = false;
 			
 			switch (mode){
-			
-				case 'tranform' : 
-					
-					selected_area.selected_point = undefined;
-					
-				break;	
 				
 				case 'polygon' : 
 					
@@ -257,88 +220,123 @@ function Areas_Editor(){
 			
 			}
 			
+
+			
 		});
 		
 		setMode("polygon");
 		
 	}
 	
-	function edit_area_name(){
-		
-		label_name.hide();
-		input_name.show();
-		
-	}
+	//LAYOUT_______________________
 	
-	function setMode(_mode){
+	function update_listed_areas(){
 		
-		mode = _mode
+		areas_list.empty();
 		
-		switch (mode){		
+		var list = jQuery('<ul/>', {
+			ae_id: 'ae_areas_list',
+			class: 'ae_layout_list',
+		}).appendTo(areas_list);			
 		
-			case 'edit': 
-				
-				input_name.hide();
-				label_name.show();
-				
-				if(selected_area==undefined){property.hide()};
-				bt_update.show();
-				bt_add.hide();
-				
-				bt_polygon.attr('class','ae_bt mode');
-				bt_edit.attr('class','ae_bt mode-selected');
-				
-			break;
+		for (var i = 0 ; i < areas.length ; i ++){
 			
-			case 'polygon' : 
+			
+			
+			listed_area = jQuery('<li/>', {
+				ae_id: areas[i].getID(),
+				ae_class:"listed_area",
+				class:'ae_listed_area',
+			}).appendTo(list);
+			
+			if(selected_area!=undefined && areas[i].getID()==selected_area.getID()){
 				
-				edit_area_name();
+				jQuery(listed_area).attr('class', 'ae_listed_area-selected');
 				
-				property.hide()
-				deselect_all();
+			}
+			
+			//SELECT_______________________
+			
+			var bt_select = jQuery('<button/>', {
+				ae_id:'bt_select'+areas[i].getID(),
+				behavior:"select",
+				text:areas[i].getName(),
+				class : "ae_bt list select",
+			}).appendTo(listed_area);
+			
+			jQuery('[ae_id="bt_select'+areas[i].getID()+'"]').click(function( event ) {
 				
-				bt_update.hide();
-				bt_add.show();
-				
-				bt_polygon.attr('class','ae_bt mode-selected');
-				bt_edit.attr('class','ae_bt mode');
+				var listed_area = jQuery(this).parent();
+				var areas_id = jQuery(listed_area).attr("ae_id");
+				select_area(areas_id);
+				update_listed_areas();
+			});
+			
+			//DELETE_______________________
+			
+			var bt_delete = jQuery('<button/>', {
+				ae_id:'bt_delete'+areas[i].getID(),
+				behavior:"delete",
+				text:"delete",
+				class : "ae_bt list delete",
+			}).appendTo(listed_area);
+			
 
+			
+			jQuery('[ae_id="bt_delete'+areas[i].getID()+'"]').click(function( event ) {
 				
-			break;
-		
+				var listed_area = jQuery(this).parent();
+				var areas_id = jQuery(listed_area).attr("ae_id");
+				remove_area(areas_id);
+				update_listed_areas();
+				
+			});
+			
+
 		
 		}
 		
-	}
-
-	
-	function select_area(_ID){
 		
-		console.log(_ID);
+		
+	}
+	
+	//FACTORY__________________________________________________________
+	
+	function add_area(_name,_coords){
+		
+		var narea = new Area(_name,_coords,acount);
+		
+		areas.unshift(narea);
+		deselect_all();
+		acount++;
+		
+		update_canvas();
+		
+	}
+	
+	
+	function remove_area(_ID){
 		
 		for (var i = 0 ; i < areas.length ; i ++){
 			
 			if(areas[i].getID() == _ID){
 				
-				selected_area = areas[i];
+				if(selected_area != undefined && selected_area.getID() == areas[i].getID()){
+					
+					selected_area = undefined;
+					property.hide();
+				}
 				
-				input_name.val(areas[i].getName());
+				areas.splice(i,1)
 				
-				areas[i].setState('edited');
-				
-				property.show();
-				
-			}else{
-				
-				areas[i].setState('added');
-				
+				break;
+					
 			}
-
 		}
 		
 		update_canvas();
-		
 	}
+	
 	
 	function update_area(_ID,_name){
 		
@@ -358,148 +356,57 @@ function Areas_Editor(){
 		
 	}
 	
-	function update_listed_areas(){
-		
-		areas_list.empty();
-		
-		var list = jQuery('<ul/>', {
-			ae_id: 'ae_areas_list',
-			class: 'ae_layout_list',
-		}).appendTo(areas_list);			
-		
-		for (var i = 0 ; i < areas.length ; i ++){
-			
+	//SELECT__________________________________________________________
+	
+	function select_area(_ID){
 
-			
-			listed_area = jQuery('<li/>', {
-				ae_id: areas[i].getID(),
-				ae_class:"listed_area",
-				class:'ae_listed_area',
-			}).appendTo(list);
-			
-			if(selected_area!=undefined && areas[i].getID()==selected_area.getID()){
-				
-				jQuery(listed_area).attr('class', 'ae_listed_area-selected');
-				
-			}
-			
-			var bt_select = jQuery('<button/>', {
-				ae_id:'bt_select'+areas[i].getID(),
-				behavior:"select",
-				text:areas[i].getName(),
-				class : "ae_bt list select",
-			}).appendTo(listed_area);
-			
-			var bt_delete = jQuery('<button/>', {
-				ae_id:'bt_delete'+areas[i].getID(),
-				behavior:"delete",
-				text:"delete",
-				class : "ae_bt list delete",
-			}).appendTo(listed_area);
-			
-
-			
-			jQuery('[ae_id="bt_delete'+areas[i].getID()+'"]').click(function( event ) {
-				
-				var listed_area = jQuery(this).parent();
-				var areas_id = jQuery(listed_area).attr("ae_id");
-				remove_area(areas_id);
-				update_canvas();
-				update_listed_areas();
-				
-			});
-			
-			jQuery('[ae_id="bt_select'+areas[i].getID()+'"]').click(function( event ) {
-				
-				var listed_area = jQuery(this).parent();
-				var areas_id = jQuery(listed_area).attr("ae_id");
-				select_area(areas_id);
-				update_canvas();
-				update_listed_areas();
-				setMode('edit');
-			});
-		
-		}
-		
-		
-		
-	}
-	
-	function isOut(x,y){
-	
-		if(x > canvas.width || x < 0 || y > canvas.height || y < 0){
-		
-			return true;
-		}
-		
-		return false;
-	
-	}
-	
-	function add_area(_name,_coords){
-		
-		var narea = new Area(_name,_coords,acount);
-		areas.push(narea);
-		acount++;
-
-	}
-	
-	
-	function remove_area(_ID){
+		setMode('edit');
 		
 		for (var i = 0 ; i < areas.length ; i ++){
 			
 			if(areas[i].getID() == _ID){
 				
-				if(selected_area != undefined && selected_area.getID() == areas[i].getID()){
-					
-					selected_area = undefined;
-					property.hide();
-				}
+				selected_area = areas[i];
 				
-				areas.splice(_ID,1)
+				input_name.val(areas[i].getName());
 				
-				break;
-					
+				areas[i].setState('edited');
+				
+				property.show();
+				
+
+				
+			}else{
+				
+				areas[i].setState('added');
+				
 			}
+
 		}
+		
+		update_canvas();
+
+		
 	}
 	
 	function deselect_all(){
 		
 		selected_area = undefined;
 		update_listed_areas();
-		
+		update_canvas();
 		
 	}
 	
 	function undo(){
-	
-		polygon.pop();
+		
+		
+		polygon.removePoint(polygon.getLastPoint());
 		ctx.drawImage(img,0,0);
 		update_canvas();
 
 	}
 	
-	function draw_areas(){
-	
-		for(var j = 0 ; j < areas.length; j ++){
-			
-			areas[j].display();
-			
-			if(selected_area != undefined){
-				
-				if(selected_area.getID() == areas[j].getID()){
-					
-					if(mode == 'edit'){
-						
-						areas[j].enable_edit_mode();
-						
-					}
-				}	
-			}
-		}
-	}
+
 	
 	function getArea(_ID){
 		
@@ -517,6 +424,8 @@ function Areas_Editor(){
 		
 	}
 	
+	// DISPLAY__________________________________________________________
+	
 	function draw_polygon(){
 		
 		var pcoords = polygon.getCoords();
@@ -524,7 +433,7 @@ function Areas_Editor(){
 		ctx.beginPath();
 		
 		ctx.strokeStyle = 'rgba(255,0,0,1)';
-		ctx.fillStyle = 'rgba(255,100,0,0.5)';
+		ctx.fillStyle = 'rgba(255,100,0,0.3)';
 		
 		if(pcoords.length > 0){
 			for(var i = 0 ; i<pcoords.length; i++){
@@ -548,6 +457,35 @@ function Areas_Editor(){
 	
 	}
 	
+	function draw_areas(){
+		
+		for(var j = 0 ; j < areas.length; j ++){
+			
+			areas[j].display();
+			
+			if(selected_area != undefined){
+				
+				if(selected_area.getID() == areas[j].getID()){
+					
+					if(mode == 'edit'){
+						
+						areas[j].enable_edit_mode();
+						
+					}
+					
+				}else{
+					
+					areas[j].setState('added')
+					
+				}	
+			}else{
+				
+				areas[j].setState('added')
+				
+			}	
+		}
+	}
+	
 	function update_canvas(){
 	
 		ctx.drawImage(img,0,0);
@@ -564,12 +502,40 @@ function Areas_Editor(){
 			
 			case "edit" : 
 				
+				if(mousedown){
+					
+					var spoint = selected_area.selected_point;
+					
+					if(spoint){
+						
+						spoint.x = mx;
+						spoint.y = my;
+						
+					}
+				
+				}
 				
 			break;
 		
 		}
 	
 	}
+	
+	function init_property(){
+		
+		input_name.val("new_area"+acount);
+		polygon = new Area('unborn',new Array(),00);
+		
+	}
+	
+	function edit_area_name(){
+		
+		label_name.hide();
+		input_name.show();
+		
+	}
+	
+	// DATA__________________________________________________________
 	
 	function update_post(){
 			
@@ -585,6 +551,62 @@ function Areas_Editor(){
 			
 	}
 	
+
+
+	//TEST__________________________________________________________
+
+	
+	function isOut(x,y){
+	
+		if(x > canvas.width || x < 0 || y > canvas.height || y < 0){
+		
+			return true;
+		}
+		
+		return false;
+	
+	}
+	
+	// OPTIONS__________________________________________________________
+	
+	function setMode(_mode){
+		
+		mode = _mode
+		
+		switch (mode){		
+		
+			case 'edit': 
+				
+				edit_area_name();
+				
+				if(selected_area==undefined){property.hide()};
+				bt_update.show();
+				bt_add.hide();
+				
+				bt_polygon.attr('class','ae_bt mode');
+				
+			break;
+			
+			case 'polygon' : 
+				
+				edit_area_name();
+				
+				property.hide()
+				deselect_all();
+				
+				bt_update.hide();
+				bt_add.show();
+				
+				bt_polygon.attr('class','ae_bt mode-selected');
+
+				
+			break;
+		
+		
+		}
+		
+	}
+	
 	//---------------------------------------------------------------------------------------------------
 	//------------------------------------------SUB CLASS AREA-------------------------------------------
 	//---------------------------------------------------------------------------------------------------
@@ -592,7 +614,7 @@ function Areas_Editor(){
 	function Area (_name,_coords,_ID){
 
 		
-		//PRIVATE VARS
+		//PRIVATE VARS__________________________________________________________
 		
 		var coords = _coords;
 		var name = _name;  
@@ -601,11 +623,11 @@ function Areas_Editor(){
 		var selectedPoin;
 		var points = new Array();
 		
-		//PUBLIC VARS
+		//PUBLIC VARS__________________________________________________________
 		
 		this.selected_point;
 		
-		//GETTERS 
+		//GETTERS__________________________________________________________
 		
 		this.getCoords = function(_type){
 		
@@ -629,7 +651,41 @@ function Areas_Editor(){
 		
 		this.getName = function(){ return name;}
 		
-		// SETTERS 
+		this.getPoint = function(_ID){
+			
+			var p = null;
+			
+			for(var i = 0 ; i < coords.length ; i++){
+				
+				if(coords[i].getID() == _ID){
+					
+					p = coords[i];
+					
+				}
+				
+			}
+			
+			return p;
+			
+		}
+		
+		this.getLastPoint = function (){
+			
+			if(coords.length > 1){
+				
+				return coords[coords.length-1].getID();
+				
+			}else{
+				
+				return coords[0].getID();
+				
+			}
+			
+			
+			
+		}
+		
+		// SETTERS__________________________________________________________ 
 		
 		this.setName = function(_name){ name = _name}
 		
@@ -649,7 +705,7 @@ function Areas_Editor(){
 			
 		}		
 		
-		//ADDERS
+		//ADDERS__________________________________________________________
 		
 		this.addPoint = function(_x,_y){
 			
@@ -659,7 +715,21 @@ function Areas_Editor(){
 			
 		}
 		
-		//DISPLAYERS
+		this.removePoint = function(_ID){
+			
+			for (var i = 0 ; i<coords.length ; i++){
+				
+				if(coords[i].getID() == _ID){
+					
+					coords.splice(1,i);
+	
+				}
+				
+			}
+			
+		}
+		
+		//DISPLAY__________________________________________________________
 		
 		this.enable_edit_mode = function(){
 			
@@ -679,22 +749,14 @@ function Areas_Editor(){
 				case  "added" :
 				
 					ctx.strokeStyle = 'rgba(0,0,255,1)';
-					ctx.fillStyle = 'rgba(0,100,255,0.5)';			
-					
-				break;
-				
-				case "selected" :
-					
-					ctx.strokeStyle = 'rgba(255,0,0,1)';
-					ctx.fillStyle = 'rgba(100,255,0,0.5)';					
-					
+					ctx.fillStyle = 'rgba(0,100,255,0.3)';			
 					
 				break;
 				
 				case "edited" :
 					
 					ctx.strokeStyle = 'rgba(255,0,0,1)';
-					ctx.fillStyle = 'rgba(255,100,0,0.5)';
+					ctx.fillStyle = 'rgba(255,100,0,0.3)';
 					
 					
 				break;
@@ -702,10 +764,16 @@ function Areas_Editor(){
 		
 
 			ctx.moveTo(coords[0].x,coords[0].y);
+			
 			for(var i = 0 ; i<coords.length; i++){
-					ctx.lineTo(coords[i].x,coords[i].y);
+				
+				ctx.lineTo(coords[i].x,coords[i].y);
 					
-			}			
+			}		
+			
+			ctx.lineTo(coords[0].x,coords[0].y);
+			
+			
 			ctx.fill();
 			ctx.stroke();
 			
@@ -722,23 +790,22 @@ function Areas_Editor(){
 	function aPoint (_x,_y,_ID){
 		
 		
-		//PUBLIC VARS
+		//PUBLIC VARS__________________________________________________________
 		
 		this.x = _x;
 		this.y = _y;
 		
-		//PRIVATE VARS 
+		//PRIVATE VARS__________________________________________________________ 
 		
 		var ID = _ID;
 		
-		//GETTERS
+		//GETTERS__________________________________________________________
 
 		this.getID = function(){ return ID;}
 		
-		//SETTERS
+		//SETTERS__________________________________________________________
 		
-		//DISPLAYERS
-		
+		//DISPLAY__________________________________________________________
 		
 		this.display_handle = function(){
 			
@@ -752,7 +819,7 @@ function Areas_Editor(){
 		}
 		
 		
-		//VERIFIERS
+		//TEST__________________________________________________________
 
 		this.isTouchedBy = function(_x,_y){
 			
