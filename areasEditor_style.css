@@ -42,9 +42,11 @@
 
 .ae_bt:hover{
 	
-	outline: solid 2px;
+	/*outline: solid 2px;*/
+	color: #555;
     
 }
+
 
 .ae_input,.ae_label{
 	
@@ -126,8 +128,10 @@
 .select{
 	
 	background-color:inherit;
+	border:none;
 	
 }
+
 
 #ae_input_name{
 	
@@ -149,7 +153,6 @@
 .mode-selected{
 	
 	background-color:white;
-	border:solid 2px;
 	width:96%;
 
 }

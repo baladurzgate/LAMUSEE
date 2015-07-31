@@ -102,7 +102,6 @@ function Areas_Editor(){
 		jQuery(bt_add).click(function( event ) {
 			
 			add_area(input_name.val(),polygon.getCoords().slice());
-			property.hide();
 			update_listed_areas();
 			init_property();
 
@@ -167,6 +166,12 @@ function Areas_Editor(){
 			switch (mode){
 			
 				case 'polygon' : 
+					
+					property.show();
+				
+				break;
+				
+				case 'move' : 
 					
 					property.show();
 				
@@ -266,9 +271,24 @@ function Areas_Editor(){
 			
 			jQuery('[ae_id="bt_select'+areas[i].getID()+'"]').click(function( event ) {
 				
+				
+				
 				var listed_area = jQuery(this).parent();
-				var areas_id = jQuery(listed_area).attr("ae_id");
-				select_area(areas_id);
+				var area_id = jQuery(listed_area).attr("ae_id");
+				
+				if(selected_area != undefined){
+				
+					if(selected_area.getID()!=area_id){
+						select_area(area_id);
+					}else{
+						setMode('polygon');
+					}
+				
+				}else{
+					
+					select_area(area_id);
+				}
+				
 				update_listed_areas();
 			});
 			
@@ -277,7 +297,7 @@ function Areas_Editor(){
 			var bt_delete = jQuery('<button/>', {
 				ae_id:'bt_delete'+areas[i].getID(),
 				behavior:"delete",
-				text:"delete",
+				text:"X",
 				class : "ae_bt list delete",
 			}).appendTo(listed_area);
 			
@@ -580,7 +600,8 @@ function Areas_Editor(){
 				edit_area_name();
 				
 				if(selected_area==undefined){property.hide()};
-				bt_update.show();
+				bt_update.show();$
+				bt_undo.hide();
 				bt_add.hide();
 				
 				bt_polygon.attr('class','ae_bt mode');
@@ -590,12 +611,10 @@ function Areas_Editor(){
 			case 'polygon' : 
 				
 				edit_area_name();
-				
-				property.hide()
 				deselect_all();
-				
 				bt_update.hide();
 				bt_add.show();
+				bt_undo.show();
 				
 				bt_polygon.attr('class','ae_bt mode-selected');
 
