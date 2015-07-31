@@ -1,0 +1,147 @@
+
+#Areas_Editor{
+	
+	margin: 0 auto;
+	/*min-width:720px;
+	max-width:1920px;*/
+	width:100%;
+	height:100px;
+	
+	
+}
+
+
+
+.ae_panel{
+	
+	margin:10px;	
+
+}
+
+.ae_sub_panel{
+	
+	background-color:white;	
+	padding:6px;
+	margin:10px;	
+	min-height:30px;
+	
+}
+
+
+.ae_bt{
+	
+	margin:5px;
+    padding: 3px 6px;
+    display: inline;
+    border: none;
+    color: #000;
+    cursor: pointer;
+    background-color:white;
+    
+}
+
+.ae_bt:hover{
+	
+	outline: solid 2px;
+    
+}
+
+.ae_input,.ae_label{
+	
+	width:97%;
+	display:block;
+	margin:3px;
+	
+}
+
+
+
+#ae_left-panel{
+	
+	width:200px;
+	max-width:920px;
+	float:left;
+
+}
+
+#ae_center-panel {
+	 /*position:absolute;*/
+
+	 float:left;
+	width:auto;
+}
+
+
+#ae_right-panel{
+
+	float:left;
+	width:300px;
+	max-width:920px;
+}
+
+#ae_source_image{
+	
+	display:none;
+	
+}
+.ae_layout_list{
+	
+	 margin:0px;
+	 padding:0px;
+}
+
+.ae_listed_area{
+	
+	list-style-type: none;
+	background-color:#DDDDDD;
+	padding:3px;
+	margin:6px;
+	
+}
+
+.ae_listed_area-selected{
+
+	background-color:#ffcb7d;
+	color:white;
+	padding:3px;
+	margin:6px;
+	
+	
+}
+
+.delete{
+	
+	float:right;
+	color:black;
+}
+
+.select{
+	
+	background-color:inherit;
+	
+}
+
+#ae_input_name{
+	
+	float:clear;
+	
+	
+}
+
+
+.mode{
+	
+	background-color:#DDDDDD;
+	display:block;
+	width:96%;
+	
+}
+
+
+.mode-selected{
+	
+	background-color:white;
+	border:solid 2px;
+	width:96%;
+
+}
