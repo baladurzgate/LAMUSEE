@@ -689,8 +689,6 @@ if(!function_exists('the_areas')){
 
 		$image_highres = get_field('image_highres',$post->ID);
 
-		$modifed_areas = $areas;
-
 		$map_scale = get_field('map_scale',$post->ID);
 
 		$map_offset_x = get_field('map_offset_x',$post->ID);
@@ -718,7 +716,6 @@ if(!function_exists('the_areas')){
 
 			$map_offset_x = 0;
 
-
 		}
 
 		if($map_offset_y != ""){
@@ -735,19 +732,6 @@ if(!function_exists('the_areas')){
 		$text_link = add_query_arg( array( 'part' => "text" ));
 
 		$details_link = add_query_arg( array( 'part' => "details" ));
-
-
-		$paintings_list = collect_matching_paintings();
-
-		choose_painting_in($paintings_list);
-
-		foreach ($paintings_list as $shape_name => $painting_id){
-				
-			$url = get_permalink($painting_id);
-
-			$modifed_areas = fill_areas_href($modifed_areas,$shape_name,$url);
-
-		}
 
 		remember_painting();
 

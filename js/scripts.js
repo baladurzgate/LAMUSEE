@@ -70,6 +70,16 @@
 					
 				});
 				
+				$('#ae_layout_panel').mCustomScrollbar({
+					
+					axis:"y",
+					theme:"dark",
+					scrollInertia:1,
+					autoHideScrollbar: true,
+					alwaysShowScrollbar: 0,
+					scrollbarPosition: "inside"
+					
+				});
 				
 
 			    
