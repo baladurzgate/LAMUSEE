@@ -9,6 +9,13 @@
 			<map name="Map<?php echo $linked_object->ID; ?>" id="Map<?php $post->ID; ?>">
 					<?php echo $modifed_areas; ?>
 			</map>
+			
+			<?php if ( current_user_can( 'edit_posts' ) ) :?>
+			
+				<a href="<?php echo $areas_link; ?>">* EDIT AREAS *</a>
+			
+			<?php endif;?>
+			
 		</div>
 	</figure>
 	
@@ -20,7 +27,7 @@
 	<?php if(has_text()):?>
 	
 		<div class="fils-right">
-			<div class="slide-right"><a href="<?php echo $text_link; ?>">â–²<br>texte</a></div>
+			<div class="slide-right"><a href="<?php echo $text_link; ?>">▲<br>texte</a></div>
 		</div>
 	
 	<?php endif;?>
@@ -28,7 +35,7 @@
 	<?php if(has_details()):?>
 	
 		<div class="fils-left">
-			<div class="slide-left"><a href="<?php echo $details_link; ?>">â–²<br>detail</a></div>
+			<div class="slide-left"><a href="<?php echo $details_link; ?>">▲<br>detail</a></div>
 		</div>
 	
 	<?php endif;?>

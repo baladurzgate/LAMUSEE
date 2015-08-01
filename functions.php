@@ -578,6 +578,8 @@ if(!function_exists('the_illustration')){
 		
 		$details_link = add_query_arg( array( 'part' => "details" ));
 		
+		$areas_link = add_query_arg( array( 'part' => "areas" ));
+		
 		
 		$paintings_list = collect_matching_paintings();
 		

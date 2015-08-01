@@ -18,7 +18,7 @@
 	</div>
 
 	<div class="fils-right">
-		<div class="slide-right"><a href="<?php echo $text_link; ?>">â–²<br>tableaux</a></div>
+		<div class="slide-right"><a href="<?php the_permalink(); ?>">▲<br>tableaux</a></div>
 	</div>
 
 

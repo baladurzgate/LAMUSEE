@@ -420,13 +420,17 @@ function Areas_Editor(){
 	
 	function add_area(_name,_shape,_coords){
 		
+		if(_coords.length > 2){
+		
 		var narea = new Area(_name,_shape,_coords,acount);
 		
-		areas.unshift(narea);
-		//deselect_all();
-		acount++;
+			areas.unshift(narea);
+			deselect_all();
+			acount++;
 		
-		//update_canvas();
+			update_canvas();
+		
+		}
 		
 	}
 	
