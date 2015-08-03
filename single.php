@@ -48,6 +48,25 @@
 											
 									break;
 									
+									case 'areas':
+										
+										if ( current_user_can( 'edit_posts' ) ) {
+											
+											the_areas();
+										
+										}else{
+											
+											
+											
+											echo "<div class ='alert_message'> YOU MUST BE LOGGED IN TO SEE THIS PAGE <br>";
+											echo '<a href = "wp-admin"> >LOG IN </a><br>';
+											echo '<a href = "'.get_permalink( $post->ID).'"> BACK </a><br></div>';
+											
+											
+										}
+											
+									break;
+									
 								}
 								
 							}else{

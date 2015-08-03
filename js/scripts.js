@@ -69,6 +69,19 @@
 					
 					
 				});
+				
+				$('#ae_layout_panel').mCustomScrollbar({
+					
+					axis:"y",
+					theme:"dark",
+					scrollInertia:1,
+					autoHideScrollbar: true,
+					alwaysShowScrollbar: 0,
+					scrollbarPosition: "inside"
+					
+				});
+				
+
 			    
 
 		});
@@ -99,6 +112,16 @@
 				
 				
 			}
+			
+			if(document.getElementById("ae_center-panel")!== null){
+				
+				console.log("areas editor");
+				
+				var AE = new Areas_Editor();
+				
+				AE.init("ae_source_image","#ae_left-panel","#ae_center-panel","#ae_right-panel");
+				
+			};
 		    
 			
 

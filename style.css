@@ -258,7 +258,7 @@ position:absolute;
 
 #tableau{
 
-	width:100%;
+	/*width:100%;*/
 	max-width:920px;
 
 }
@@ -451,5 +451,12 @@ height:10px;
 	
 }
 
-
+.alert_message{
+	
+	background-color:white;
+	
+	padding:10px;
+	
+	
+}
 

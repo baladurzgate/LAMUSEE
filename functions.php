@@ -122,6 +122,9 @@ function html5blank_header_scripts()
         
         wp_register_script('html5blankscripts', get_template_directory_uri() . '/js/scripts.js', array('jquery'), '1.0.0'); // Custom scripts
         wp_enqueue_script('html5blankscripts');
+        
+        wp_register_script('areasEditor', get_template_directory_uri() . '/js/lib/areasEditor.js', array('jquery'), '1.0.0'); // Conditional script(s)
+        wp_enqueue_script('areasEditor'); // Enqueue it!
                 
     }
 }
@@ -133,6 +136,7 @@ function html5blank_conditional_scripts()
         wp_register_script('scriptname', get_template_directory_uri() . '/js/scriptname.js', array('jquery'), '1.0.0'); // Conditional script(s)
         wp_enqueue_script('scriptname'); // Enqueue it!
     }
+
 }
 
 // Load HTML5 Blank styles
@@ -144,8 +148,11 @@ function html5blank_styles()
     wp_register_style('scrollbar', get_template_directory_uri() . '/jquery.mCustomScrollbar.css', array(), '1.0', 'all');
     wp_enqueue_style('scrollbar'); // Enqueue it!
 
-    wp_register_style('html5blank', get_template_directory_uri() . '/style.css', array(), '1.0', 'all');
-    wp_enqueue_style('html5blank'); // Enqueue it!
+    wp_register_style('lamusee', get_template_directory_uri() . '/style.css', array(), '1.0', 'all');
+    wp_enqueue_style('lamusee'); // Enqueue it!
+    
+    wp_register_style('areasEditor', get_template_directory_uri() . '/areasEditor_style.css', array(), '1.0', 'all');
+    wp_enqueue_style('areasEditor'); // Enqueue it!
 }
 
 // Register HTML5 Blank Navigation
@@ -571,6 +578,8 @@ if(!function_exists('the_illustration')){
 		
 		$details_link = add_query_arg( array( 'part' => "details" ));
 		
+		$areas_link = add_query_arg( array( 'part' => "areas" ));
+		
 		
 		$paintings_list = collect_matching_paintings();
 		
@@ -660,6 +669,84 @@ if(!function_exists('the_details')){
 
 }
 
+if(!function_exists('the_areas')){
+
+	function the_areas($otherpost=null){
+
+		if($otherpost!=null){
+
+			$post = $otherpost;
+
+		}else{
+
+			global $post;
+
+		}
+
+		$post_url = get_permalink( $post->ID);
+
+		$image = get_field('lowres_image',$post->ID);
+			
+		$areas = get_field('areas',$post->ID);
+
+		$image_highres = get_field('image_highres',$post->ID);
+
+		$map_scale = get_field('map_scale',$post->ID);
+
+		$map_offset_x = get_field('map_offset_x',$post->ID);
+
+		$map_offset_y = get_field('map_offset_y',$post->ID);
+
+		if($map_scale != ""){
+				
+			$map_scale = floatval($map_scale);
+				
+			if($map_scale == 0)$map_scale = 1;
+				
+		}else{
+				
+			$map_scale = 1;
+				
+				
+		}
+
+		if($map_offset_x != ""){
+
+			$map_offset_x  = floatval($map_offset_x);
+
+		}else{
+
+			$map_offset_x = 0;
+
+		}
+
+		if($map_offset_y != ""){
+
+			$map_offset_y  = floatval($map_offset_y);
+
+		}else{
+
+			$map_offset_y = 0;
+
+
+		}
+
+		$text_link = add_query_arg( array( 'part' => "text" ));
+
+		$details_link = add_query_arg( array( 'part' => "details" ));
+
+		remember_painting();
+
+		remember_shape();
+
+		include(locate_template('template_areas.php'));
+
+
+	}
+
+}
+
+
 if(!function_exists('zoom_link')){
 
 	function zoom_link($text){
@@ -676,7 +763,7 @@ if(!function_exists('zoom_link')){
 
 }
 
-if(!function_exists('convert_shapes')){
+if(!function_exists('collect_shapes')){
 	
 	function collect_shapes($str){
 		
@@ -823,24 +910,14 @@ if(!function_exists('remove_visited')){
 								
 								unset($arr[$key]);
 								array_values($arr);
-							
-							}
-							
-								
-						}
-							
+							}	
+						}	
 					}
-				
 				}
-				
-			}	
-				
+			}		
 		}
-		
 		return $arr;
-		
 	}
-
 }
 
 if(!function_exists('choose_painting_in')){
