@@ -120,11 +120,14 @@ function html5blank_header_scripts()
         wp_register_script('imagesloaded.min', get_template_directory_uri() . '/js/lib/imagesloaded.min.js', array('jquery')); // jquery
         wp_enqueue_script('imagesloaded.min');
         
-        wp_register_script('html5blankscripts', get_template_directory_uri() . '/js/scripts.js', array('jquery'), '1.0.0'); // Custom scripts
-        wp_enqueue_script('html5blankscripts');
+        wp_register_script('lamusee', get_template_directory_uri() . '/js/scripts.js', array('jquery'), '1.0.0'); // Custom scripts
+        wp_enqueue_script('lamusee');
+		
         
         wp_register_script('areasEditor', get_template_directory_uri() . '/js/lib/areasEditor.js', array('jquery'), '1.0.0'); // Conditional script(s)
         wp_enqueue_script('areasEditor'); // Enqueue it!
+		
+		wp_localize_script('areasEditor', 'ajaxurl', admin_url( 'admin-ajax.php' ) );
                 
     }
 }
@@ -1261,28 +1264,57 @@ function filter_only_paintings($where = '') {
 
 add_shortcode( 'random_painting_link', 'random_painting_link' );
 
-/*
 
 
-add_filter( 'manage_paintings_columns', 'paintings_columns' ) ;
+if(!function_exists('update_areas')){
 
-function paintings_columns( $columns ) {
+add_action( 'wp_ajax_update_areas', 'update_areas' );
+add_action( 'wp_ajax_nopriv_update_areas', 'update_areas' );
 
-	$columns = array(
-			/*'cb' => '<input type="checkbox" />',
-			'title' => __( 'Movie' ),
-			'duration' => __( 'Duration' ),
-			'genre' => __( 'Genre' ),
-			'date' => __( 'Date' )
-	);
+	function update_areas(){
 
-	return $columns;
+		
+		
+		$post_id = "";
+		$post_area= "";
+
+		if(isset($_POST["post_id"]) && isset($_POST["post_areas"]) && isset($_POST["post_scale"]) && isset($_POST["post_offset_x"]) && isset($_POST["post_offset_y"])){
+		
+			$post_id = sanitize_text_field($_POST["post_id"]);
+			$post_area = $_POST["post_areas"];
+			$post_scale = $_POST["post_scale"];
+			$post_offset_x = $_POST["post_offset_x"];
+			$post_offset_y = $_POST["post_offset_y"];
+		
+			echo $post_area;
+			
+			echo $post_id;
+			
+			update_field('areas', $post_area, $post_id);
+			update_field('map_scale', $post_scale, $post_id);
+			update_field('map_offset_x', $post_offset_x, $post_id);
+			update_field('map_offset_y', $post_offset_y, $post_id);
+			//update_field('areas', $post_areas, $post_id);
+			//update_field('field_55437acf2f99f', $post_areas, $post_id);
+			
+			echo '* AREAS UPDATED *';
+
+		}else{
+			
+			echo '* UPDATING AREAS FAILED *';
+		
+		
+		}
+
+		
+			
+		die();
+		
+	}
+
 }
 
 
-
-
-*/
 
 
 
