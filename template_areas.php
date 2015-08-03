@@ -2,9 +2,8 @@
 
 	<div id = "Areas_Editor">
 		<div id = "ae_top-panel" class = "ae_panel">
-		<div id = "title" class = "ae_sub_panel"><a href="<?php the_permalink(); ?>" title="<?php the_title(); ?>"><?php the_title(); ?></a>
-		</div></div>
-		
+			<div id = "title" class = "ae_sub_panel"><a href="<?php the_permalink(); ?>" title="<?php the_title(); ?>"><?php the_title(); ?></a></div>
+		</div>
 		<div id = "ae_left-panel" class = "ae_panel"></div>
 		<div id="ae_center-panel" class = "ae_panel">
 			<div class = "imgborder">

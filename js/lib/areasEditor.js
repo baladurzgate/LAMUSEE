@@ -10,7 +10,7 @@ function Areas_Editor(){
 	//PRIVATE VARS__________________________________________________________
 	
 	var areas_editor;
-	var canvas,ctx,img,left,center,right;
+	var canvas,ctx,img,top,left,center,right;
 	var tools,areas_list,modes,property;
 	var bt_add,bt_update,bt_polygon,bt_polygon;
 	var input_name,input_scale,input_offset_x,input_offset_y;
@@ -31,7 +31,7 @@ function Areas_Editor(){
 	
 	// INIT__________________________________________________________ 
 	
-	this.init = function(_img,_left,_center,_right){
+	this.init = function(_img,_top,_left,_center,_right){
 		
 
 		
@@ -39,6 +39,7 @@ function Areas_Editor(){
 		//INIT_VARS
 	
 		img = document.getElementById(_img);
+		top = jQuery(_top);
 		left = jQuery(_left);
 		center = jQuery(_center);
 		right = jQuery(_right);
@@ -51,6 +52,7 @@ function Areas_Editor(){
 		}).appendTo(center);
 		
 		
+		console.log(top);
 		console.log(left);
 		console.log(center);
 		console.log(right);

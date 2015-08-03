@@ -5,7 +5,7 @@
 
 	if(isset($_POST["post_id"]) && isset($_POST["areas"]){
 		
-		if($_POST["post_id".length < 8){
+		if($_POST["post_id"].length < 8){
 			$post_id = sanitize_text_field($_POST["post_id"]);
 		}
 		
