@@ -70,6 +70,27 @@
 
 #ae_top-panel{
 	
+	background-color:white;
+	padding:20px;
+
+}
+.ae_title{
+	
+	float:left;
+
+}
+
+
+.ae_bt_save{
+	
+	float:right;
+	padding:0px;
+	margin:0px;
+
+}
+.ae_info{
+
+	color:grey;
 
 }
 

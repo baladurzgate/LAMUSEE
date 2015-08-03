@@ -22,19 +22,23 @@ function Areas_Editor(){
 	var acount = 0;
 	var pcount = 0;
 	var polygon = new Area('unborn','poly',new Array(),00);
+	var source_areas , post_title ,  post_id , scale , offset_x , offset_y ;
+	var output_info;
+	var saved_changes = true;
 	
-	var source_areas = jQuery('[ae_id="source_areas"]');
-	
-	var post_id = source_areas.attr("ae_post_id");
-	var scale = 1,offset_x = 0 ,offset_y = 0 ;
-	
+	scale = 1;
+	offset_x = 0;
+	offset_y = 0;	
 	
 	// INIT__________________________________________________________ 
 	
 	this.init = function(_img,_top,_left,_center,_right){
 		
 
-		
+		source_areas = jQuery('[ae_id="source_areas"]');
+		post_title = source_areas.attr("ae_post_title");
+		post_id = source_areas.attr("ae_post_id");
+
 		
 		//INIT_VARS
 	
@@ -69,17 +73,31 @@ function Areas_Editor(){
 		
 		// file_panel 
 		
-		file = jQuery('<div/>', {
+		file = jQuery('<span/>', {
 			id:'ae_file_panel',
 			ae_id: 'file_panel',
 			class:'ae_sub_panel'
-		}).appendTo(top);	
+		}).appendTo(top);
 
+		bt_save = jQuery('<span/>', {
+			ae_id: "title",
+			text:post_title,
+			class:'ae_title',
+		}).appendTo(file);		
+		
+		output_info = jQuery('<i/>', {
+			ae_id: "output_info",
+			text:"...",
+			class:'ae_info',
+		}).appendTo(file);
+		
 		bt_save = jQuery('<button/>', {
 			ae_id: "bt_save",
-			text:"save",
-			class:'ae_bt',
+			text:"---> SAVE ",
+			class:'ae_bt_save ae_bt',
 		}).appendTo(file);
+		
+
 		
 		jQuery(bt_save).click(function(event){
 			
@@ -149,7 +167,9 @@ function Areas_Editor(){
 			
 		})
 		
-		bt_rect = jQuery('<button/>', {
+		// WIP : 
+		
+		/*bt_rect = jQuery('<button/>', {
 			ae_id: "bt_rect",
 			text:"rectangle",
 			class:'ae_bt mode',
@@ -171,7 +191,7 @@ function Areas_Editor(){
 			
 			//setMode("circle");
 			
-		})
+		})*/
 
 		// property panel_______________________
 		
@@ -319,6 +339,8 @@ function Areas_Editor(){
 					if(!isOut(mx,my)){
 						
 						polygon.addPoint(mx,my);
+						
+						update_output_info("unsaved changes");
 					}
 										
 				break;
@@ -326,6 +348,8 @@ function Areas_Editor(){
 				case 'edit' : 
 					
 					selected_area.selected_point = undefined;
+					
+					update_output_info("unsaved changes");
 					
 				break;			
 			
@@ -338,6 +362,8 @@ function Areas_Editor(){
 		import_areas();
 		
 		setMode("polygon");
+		
+		update_output_info("areas up to date");
 		
 		
 		// CSS
@@ -435,12 +461,8 @@ function Areas_Editor(){
 				update_listed_areas();
 				
 			});
-			
-
 		
 		}
-		
-		
 		
 	}
 	
@@ -458,7 +480,10 @@ function Areas_Editor(){
 		
 			update_canvas();
 		
+		
 		}
+		
+		update_output_info("unsaved changes");
 		
 	}
 	
@@ -483,6 +508,8 @@ function Areas_Editor(){
 		}
 		
 		update_canvas();
+		
+		update_output_info("unsaved changes");
 	}
 	
 	
@@ -501,6 +528,8 @@ function Areas_Editor(){
 			update_canvas();
 			
 		}
+		
+		update_output_info("unsaved changes");
 		
 	}
 	
@@ -666,7 +695,14 @@ function Areas_Editor(){
 			break;
 		
 		}
+		
+		
 	
+	}
+	
+	function update_output_info(_msg){
+		output_info.text(_msg);
+		
 	}
 	
 	function init_property(){
@@ -755,19 +791,10 @@ function Areas_Editor(){
 			'post_offset_y':offset_y
 			
 		};
-			
-		/*jQuery.ajax({
-			type: "POST",
-			url: "update_areas.php",
-			data: "post_id=" + post_id + "&post_areas=" + html_areas,
-			cache: true,
-			success: function(data) {
-				alert("success!");
-			}
-		});*/
 		
 		jQuery.post(ajaxurl, data, function(response) {
-			alert('Got this from the server: ' + response);
+			//alert('Got this from the server: ' + response);
+			update_output_info("areas up to date");
 		});
 			
 	}
