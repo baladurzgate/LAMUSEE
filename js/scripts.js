@@ -12,6 +12,16 @@
 				  $('#load_gif').hide();
 				  $('#conteneur').show();
 				  
+					if(document.getElementById("ae_center-panel")!== null){
+						
+						console.log("areas editor");
+						
+						var AE = new Areas_Editor();
+						
+						AE.init("ae_source_image","#ae_top-panel","#ae_left-panel","#ae_center-panel","#ae_right-panel");
+						
+					};
+				  
 				});
 			
 			
@@ -113,15 +123,7 @@
 				
 			}
 			
-			if(document.getElementById("ae_center-panel")!== null){
-				
-				console.log("areas editor");
-				
-				var AE = new Areas_Editor();
-				
-				AE.init("ae_source_image","#ae_top-panel","#ae_left-panel","#ae_center-panel","#ae_right-panel");
-				
-			};
+
 		    
 			
 

@@ -8,9 +8,9 @@
 	</figure>
 	
 	<div id="txt">
-		Aucun texte n'est associé à ce tableau pour l'instant. 
+		Aucun texte n'est associ� � ce tableau pour l'instant. 
 	</div>
 	
 	<div class="fils-left">
-		<div class="slide-left"><a href="<?php echo $history_link; ?>">â–²<br>historique</a></div>';
+		<div class="slide-left"><a href="<?php echo $history_link; ?>">▲<br>historique</a></div>';
 	</div>

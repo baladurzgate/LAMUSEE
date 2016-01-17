@@ -90,14 +90,13 @@ function Areas_Editor(){
 			text:"...",
 			class:'ae_info',
 		}).appendTo(file);
+
 		
 		bt_save = jQuery('<button/>', {
 			ae_id: "bt_save",
-			text:"---> SAVE ",
+			text:" SAVE --->",
 			class:'ae_bt_save ae_bt',
 		}).appendTo(file);
-		
-
 		
 		jQuery(bt_save).click(function(event){
 			
@@ -105,6 +104,21 @@ function Areas_Editor(){
 			update_post();
 			
 		})
+		
+		/*
+		
+		bt_reload = jQuery('<button/>', {
+			ae_id: "bt_reload",
+			text:"  ---> RELOAD  ",
+			class:'ae_bt_save ae_bt',
+		}).appendTo(file);
+		
+		jQuery(bt_reload).click(function(event){
+			
+			import_areas();
+			update_canvas();
+			
+		})*/
 		
 		// global_transform_panel__________________
 		
@@ -363,9 +377,6 @@ function Areas_Editor(){
 		
 		setMode("polygon");
 		
-		update_output_info("areas up to date");
-		
-		
 		// CSS
 		
 		areas_editor = jQuery('#Areas_Editor');
@@ -470,7 +481,7 @@ function Areas_Editor(){
 	
 	function add_area(_name,_shape,_coords){
 		
-		if(_coords.length > 2){
+		if(_coords.length >= 2){
 		
 		var narea = new Area(_name,_shape,_coords,acount);
 		
@@ -820,6 +831,8 @@ function Areas_Editor(){
 	}
 	
 	function import_areas(){
+	
+		areas = new Array();
 		
 		post_id = parseInt(source_areas.attr("ae_post_id"));
 		scale = parseFloat(source_areas.attr("ae_scale"));
@@ -889,11 +902,19 @@ function Areas_Editor(){
 			
 			}
 			
+			
+			console.log(title);
+			
 			name = name.slice(1) != "" ? name.slice( 1 ) : '.';
 
 			add_area(name,shape,iarea.getCoords(),title);
+			
+					
+			update_output_info("areas up to date");
+			
 		});		
 	
+		
 	
 	}
 	
