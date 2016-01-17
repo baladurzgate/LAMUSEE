@@ -464,7 +464,7 @@ if(!function_exists('remember_painting')){
 			
 			if (session_status() == PHP_SESSION_NONE) {
 				
-				session_start();
+				//session_start();
 				
 			}		
 			
@@ -1061,7 +1061,7 @@ if(!function_exists('get_visited_paintings')){
 
 		if (session_status() == PHP_SESSION_NONE) {
 		
-			session_start();
+			//session_start();
 		
 		}
 			
@@ -1215,6 +1215,40 @@ if(!function_exists('get_shape_list')){
 		}
 		
 		return $shape_list;
+
+	}
+
+}
+
+
+if(!function_exists('get_artist_list')){
+
+	function get_artist_list(){
+		
+		$artist_list = array();
+
+		$query = array( 'post_status' => 'publish','numberposts' => -1 );
+
+		$all_published_posts = get_posts($query);
+		
+		foreach ( $all_published_posts as $post ) {
+			
+			$post_artist['name'] = get_field('artiste',$post->ID);
+			$post_artist['paintings'] = array();
+			
+			if(!in_array($post_artist_str,$artist_list){
+			
+				array_push($artist_list,$post_artist)
+			
+			}
+			
+			array_push($post_artist['paintings'],$post->ID);
+			
+
+				
+		}
+		
+		return $artist_list;
 
 	}
 
