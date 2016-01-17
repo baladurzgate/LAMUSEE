@@ -460,3 +460,12 @@ height:10px;
 	
 }
 
+#load_gif{
+ background-image: url("alige2.gif");
+ background-repeat: no-repeat;
+ background-position: center;
+ width:304px;
+ height:276px;
+ margin :100px auto;
+}
+
