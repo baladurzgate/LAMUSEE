@@ -1231,22 +1231,46 @@ if(!function_exists('get_artist_list')){
 
 		$all_published_posts = get_posts($query);
 		
+		
+		
+		
 		foreach ( $all_published_posts as $post ) {
 		
-			if(get_post_format( $post->ID )== 'image'){
+			if(get_post_format( $post->ID )== 'image'  && get_field('artiste',$post->ID) != '' && get_field('artiste',$post->ID) != undefined){
 			
-				$post_artist['name'] = get_field('artiste',$post->ID);
+				$match = 0;
 				
-				if($post_artist['name'] != unedfined && $post_artist['name'] != ''){
+				$artist_field_value = get_field('artiste',$post->ID);
 				
+				if(count($artist_list)>0){
+			
+					foreach ($artist_list as $key => $listed_artist){
+					
+						if($artist_field_value == $artist_list[$key]['name']){
+						
+							if(in_array($post->ID,$artist_list[$key]['paintings'])==false){
+							
+								array_push($artist_list[$key]['paintings'],$post->ID);
+							
+							}
+							
+							
+							$match++;
+						
+						}
+
+					}
+				
+				}
+				
+				if($match == 0){
+				
+					$post_artist = array();
+					$post_artist['name'] = $artist_field_value;
 					$post_artist['paintings'] = array();
 					array_push($post_artist['paintings'],$post->ID);
-					
-					if(in_array($post_artist,$artist_list)==false){
-					
-						array_push($artist_list,$post_artist);
-					
-					}	
+					array_push($artist_list,$post_artist);
+
 				
 				}
 				
@@ -1254,6 +1278,8 @@ if(!function_exists('get_artist_list')){
 
 				
 		}
+		
+
 		
 		return $artist_list;
 

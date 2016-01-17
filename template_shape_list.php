@@ -5,7 +5,7 @@ $shape_list = get_shape_list();
 function compareByName($a, $b) {
 	return strcmp($a["name"], $b["name"]);
 }
-usort($shape_list, 'compareByName');
+//usort($shape_list, 'compareByName');
 
 
 
