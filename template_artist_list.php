@@ -1,13 +1,12 @@
 <?php /* Template Name: ArtistList*/ get_header(); 
 
-artist_list = get_artist_list();
+$artist_list = get_artist_list();
+
 
 function compareByName($a, $b) {
 	return strcmp($a["name"], $b["name"]);
 }
 usort($artist_list, 'compareByName');
-
-
 
 foreach ( $artist_list as $artist ) :
 

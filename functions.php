@@ -1232,18 +1232,25 @@ if(!function_exists('get_artist_list')){
 		$all_published_posts = get_posts($query);
 		
 		foreach ( $all_published_posts as $post ) {
+		
+			if(get_post_format( $post->ID )== 'image'){
 			
-			$post_artist['name'] = get_field('artiste',$post->ID);
-			$post_artist['paintings'] = array();
-			
-			if(!in_array($post_artist_str,$artist_list){
-			
-				array_push($artist_list,$post_artist)
-			
+				$post_artist['name'] = get_field('artiste',$post->ID);
+				
+				if($post_artist['name'] != unedfined && $post_artist['name'] != ''){
+				
+					$post_artist['paintings'] = array();
+					array_push($post_artist['paintings'],$post->ID);
+					
+					if(in_array($post_artist,$artist_list)==false){
+					
+						array_push($artist_list,$post_artist);
+					
+					}	
+				
+				}
+				
 			}
-			
-			array_push($post_artist['paintings'],$post->ID);
-			
 
 				
 		}
