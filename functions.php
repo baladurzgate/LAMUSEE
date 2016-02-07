@@ -107,6 +107,9 @@ function html5blank_header_scripts()
         
         wp_register_script('jquery', get_template_directory_uri() . '/js/lib/jquery.js', array()); // jquery
         wp_enqueue_script('jquery'); 
+        
+        wp_register_script('jquery-ui', get_template_directory_uri() . '/js/lib/jquery-ui.min.js', array()); // jquery
+        wp_enqueue_script('jquery-ui'); 
 		
         wp_register_script('mcustomscrollbar', get_template_directory_uri() . '/js/lib/jquery.mCustomScrollbar.concat.min.js', array('jquery')); // Custom scripts
         wp_enqueue_script('mcustomscrollbar');
@@ -156,6 +159,12 @@ function html5blank_styles()
     
     wp_register_style('areasEditor', get_template_directory_uri() . '/areasEditor_style.css', array(), '1.0', 'all');
     wp_enqueue_style('areasEditor'); // Enqueue it!
+    
+    wp_register_style('jquery-ui', get_template_directory_uri() . '/jquery-ui.css', array(), '1.0', 'all');
+    wp_enqueue_style('jquery-ui'); // Enqueue it!
+    
+    
+    
 }
 
 // Register HTML5 Blank Navigation
