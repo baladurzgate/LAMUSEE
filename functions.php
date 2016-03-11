@@ -426,6 +426,35 @@ add_filter('style_loader_tag', 'html5_style_remove'); // Remove 'text/css' from 
 add_filter('post_thumbnail_html', 'remove_thumbnail_dimensions', 10); // Remove width and height dynamic attributes to thumbnails
 add_filter('image_send_to_editor', 'remove_thumbnail_dimensions', 10); // Remove width and height dynamic attributes to post images
 
+
+/* prevent author from editing other authors' posts */
+
+function posts_for_current_author($query) {
+
+	    global $pagenow;
+
+	    if( 'edit.php' != $pagenow || !$query->is_admin ){
+	    	
+	        return $query;
+	    	
+	    }
+
+
+	    if( !current_user_can( 'edit_others_posts' ) ) {
+
+	        global $user_ID;
+
+	        $query->set('author', $user_ID );
+
+	    }
+
+	    return $query;
+
+}
+
+add_filter('pre_get_posts', 'posts_for_current_author');
+
+
 // Remove Filters
 remove_filter('the_excerpt', 'wpautop'); // Remove <p> tags from Excerpt altogether
 
@@ -462,6 +491,22 @@ function html5_shortcode_demo_2($atts, $content = null) // Demo Heading H2 short
 
 
 add_query_arg( 'part');
+
+
+
+if(!function_exists('clean_area_field')){
+	
+	function clean_area_field($bad_html){
+
+		$js_removed= preg_replace('#<script(.*?)>(.*?)</script>#is', '', $bad_html);	
+		
+		return $js_removed;
+		
+	
+	}
+	
+	
+}
 
 if(!function_exists('remember_painting')){
 	
@@ -538,9 +583,11 @@ if(!function_exists('the_illustration')){
 		$post_url = get_permalink( $post->ID);
 		
 		$image = get_field('lowres_image',$post->ID);
+				
+		$area_field = get_field('areas',$post->ID);
 			
-		$areas = get_field('areas',$post->ID);
-		
+		$areas = clean_area_field($area_field);
+			
 		$image_highres = get_field('image_highres',$post->ID);
 		
 		$modifed_areas = $areas;
@@ -699,7 +746,9 @@ if(!function_exists('the_areas')){
 
 		$image = get_field('lowres_image',$post->ID);
 			
-		$areas = get_field('areas',$post->ID);
+		$area_field = get_field('areas',$post->ID);
+			
+		$areas = clean_area_field($area_field);
 
 		$image_highres = get_field('image_highres',$post->ID);
 
