@@ -13,14 +13,23 @@
 		</div>
 		<div id = "ae_right-panel" class = "ae_panel"></div>
 		<input type='hidden' id='AllShapeNames' value = '<?php 
-			$shape_list = get_shape_list();
-			function compareByName($a, $b) {
-				return strcmp($a["name"], $b["name"]);
-			}
+		
+		$shape_list = get_shape_list();
+		
+		function compareByName($a, $b) {
+			return strcmp($a["name"], $b["name"]);
+		}
+		
+		usort($shape_list, 'compareByName');
+		
+		
+		
+		foreach ( $shape_list as $shape ) {
+		
+			echo $shape['name'].',';
 			
-			usort($shape_list, 'compareByName');
-			foreach ( $shape_list as $shape ) {echo $shape['name'].',';}
-			
+		}
+		
 		?>'>
 	</div>
 

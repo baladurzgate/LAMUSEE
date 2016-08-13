@@ -4,13 +4,15 @@
 		
 		'use strict';
 		
-		$(document).ready(function() {
+		jQuery(document).ready(function() {
 			
-				$('#conteneur').imagesLoaded( function() {
+			
+				jQuery('#conteneur').imagesLoaded( function() {
 					
 				  console.log('image loaded');
-				  $('#load_gif').hide();
-				  $('#conteneur').show();
+				  jQuery('#load_gif').hide();
+				  jQuery('#conteneur').show();
+				  	center_illustration();
 				  
 					if(document.getElementById("ae_center-panel")!== null){
 						
@@ -25,12 +27,12 @@
 				});
 			
 			
-			    $('area').each(function() {
+			    jQuery('area').each(function() {
 				    	
-			    	if($(this).attr("href").indexOf('#') != -1){
+			    	if(jQuery(this).attr("href").indexOf('#') != -1){
 			    		
 				    	//$(this).remove();
-			    		$(this).css( 'cursor', 'initial' );
+			    		jQuery(this).css( 'cursor', 'initial' );
 				    	console.log($(this).attr("href"));
 				    	
 				    	
@@ -38,7 +40,7 @@
 				   
 			    });
 			    
-			    $('area').click(function(){
+			    jQuery('area').click(function(){
 			    	
 			    	
 			    	if($(this).attr("href").indexOf('#') === -1){
@@ -50,14 +52,14 @@
 			    	
 			    })
 			    	
-			    $('area').mouseover(function(){
+			    jQuery('area').mouseover(function(){
 			    	
 			    	var shape = $(this).attr("title");
 			    	$(".legende").html(shape);
 
 			    })	
 			    
-			    $('area').mouseout(function(){
+			    jQuery('area').mouseout(function(){
 			    	
 			    	$(".legende").html('...');
 
@@ -67,7 +69,7 @@
 			    refresh_history();
 				
 				
-				$("#txt").mCustomScrollbar({
+				jQuery("#txt").mCustomScrollbar({
 					
 					axis:"y",
 					theme:"dark",
@@ -80,7 +82,7 @@
 					
 				});
 				
-				$('#ae_layout_panel').mCustomScrollbar({
+				jQuery('#ae_layout_panel').mCustomScrollbar({
 					
 					axis:"y",
 					theme:"dark",
@@ -91,9 +93,28 @@
 					
 				});
 				
-
+				/* Deplie la liste en dessous */
+				
+			    jQuery(".display_bellow_button").click(function() {
+            jQuery(this).closest(".content-holder").find(".toggle_below", this).toggle();
+            jQuery(this).closest(".content-holder").find(".hide_bellow_button", this).show();
+            jQuery(this).hide();
+            return false;  
+            	
+            
+             })
 			    
-
+			    jQuery(".hide_bellow_button").click(function() {
+            jQuery(this).closest(".content-holder").find(".toggle_below", this).toggle();
+            jQuery(this).closest(".content-holder").find(".display_bellow_button", this).show();
+             jQuery(this).hide();
+            return false;  
+            	
+            
+             })
+             
+             center_illustration();
+			    
 		});
 		
 		
@@ -102,11 +123,13 @@
 		var aScaler;
 		
 
-		$(window).load(function(){
+		jQuery(window).load(function(){
 			
 
 			
 			if(document.getElementById('zoom_frame')!== null){
+				
+				
 				
 				loupe = new Loupe('#zoom_img','#zoom_frame','#source_img','#source_frame','#zone_selector');
 				loupe.init();
@@ -130,11 +153,17 @@
 		});
 		
 
-		$( window ).resize(function() {
+		jQuery( window ).resize(function() {
+			
+			
+					
+			center_illustration();
+			
 			
 			if(document.getElementById('zoom_frame')!== null){
 			
 				loupe.update_scale();
+				
 			
 			}
 			
@@ -143,7 +172,7 @@
 				aScaler.update();				
 				
 			}
-			
+	
 			
 		});
 		  
@@ -167,6 +196,52 @@
 			
 		}		
 		
+		
+		
+		function center_illustration(){
+			
+			console.log("center_illustration")
+			
+			var window_width = jQuery( window ).width();
+			
+			
+			if(document.getElementById('illustration')!== null){
+			
+				var illustration = document.getElementById('tableau');
+				var illustration_total_width = illustration.width;
+				var center_left_value = (window_width/2)-(illustration_total_width/2);
+			
+				if(center_left_value < 0){
+			
+					center_left_value = 0;			
+				}
+			
+				console.log(window_width);
+				console.log(illustration_total_width);
+			
+			}
+			
+			jQuery("#illustration" ).css("left", center_left_value+"px" );
+			
+				if(document.getElementById('carte')!== null){
+			
+				jQuery("#carte" ).css("width", illustration_total_width+"px" );
+			
+			
+			}		
+			
+			if(document.getElementById('zoom_frame')!== null){
+				
+				
+				var zoom_marginleft = (window_width/2)-250;
+			
+				jQuery("#details").css("margin-left", zoom_marginleft+"px" );
+			
+			
+			}	
+				
+		}
+			
 		function refresh_history(){
 			
 			var storedShapes = sessionStorage.getItem("shapes") != undefined ? JSON.parse(sessionStorage.getItem("shapes")) : storedShapes = [];

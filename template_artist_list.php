@@ -17,15 +17,24 @@ foreach ( $artist_list as $artist ) :
 		
 	<div class = "shape_row <?php echo $extra_class; ?>">
 		<div class = "artist_name "><center><b><?php echo $artist['name'] ;  ?></center> </b></div>
-		<div class = "artist_related_paintings">
-			<ul> 
-			<?php foreach ( $artist['paintings'] as $painting_id ) : ?>
+		<div class = "content-holder">
+			<div class = "display_bellow_button"><center>🔻</center></div>
+			<div class = "hide_bellow_button"><center>🔺</center></div>
+			<div class = "toggle_below">
+				<div class = "artist_related_paintings">
+					<ul> 
+					<?php foreach ( $artist['paintings'] as $painting_id ) : ?>
 				
-				<li><a href="<?php echo get_permalink($painting_id );  ?>"><?php echo get_the_title($painting_id);  ?></a> <?php edit_post_link('edit', ' ( ', ' ) ', $painting_id ); ?></li>
+					<li><a href="<?php echo get_permalink($painting_id );  ?>">
+					<?php echo get_the_title($painting_id);  ?></a> 
+					<?php edit_post_link('edit', ' ( ', ' ) ', $painting_id ); ?></li>
 				
-			<?php endforeach;  ?>
-			</ul>
+					<?php endforeach;  ?>
+					</ul>
+				</div>
+			</div>		
 		</div>
+		
 	</div>
 
 

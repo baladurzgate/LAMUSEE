@@ -7,8 +7,8 @@
 		<?php the_carte($post); ?>
 	</figure>
 	
-	<div id="txt">
-		Aucun texte n'est associé à ce tableau pour l'instant. 
+	<div id="missing-txt" class = "missing_text">
+		<div class = "missing_txt_gif"></div>
 	</div>
 	
 	<div class="fils-left">

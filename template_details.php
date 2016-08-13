@@ -1,6 +1,6 @@
 <?php /* Template Name: Details */ get_header(); ?>
 
-<div class="details"  >
+<div class="details" id="details" >
 
 	<div id = 'zoom_frame'  >
 		<img id = "zoom_img" src="<?php echo $image_highdef['url']; ?>"/>	    

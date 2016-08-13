@@ -13,7 +13,8 @@ function Areas_Editor(){
 	var canvas,ctx,img,top,left,center,right;
 	var tools,areas_list,modes,property,global_transform,file;
 	var bt_add,bt_update,bt_polygon,bt_polygon;
-	var input_name,input_scale,input_offset_x,input_offset_y;
+	var label_name,label_title;
+	var input_name,input_title,input_scale,input_offset_x,input_offset_y;
 	var areas = new Array();
 	var mousedown = false;
 	var mx=0,my=0;
@@ -21,7 +22,7 @@ function Areas_Editor(){
 	var selected_area;
 	var acount = 0;
 	var pcount = 0;
-	var polygon = new Area('unborn','poly',new Array(),00);
+	var polygon = new Area('unborn',00,'poly',new Array());
 	var source_areas , post_title ,  post_id , scale , offset_x , offset_y ;
 	var output_info;
 	var saved_changes = true;
@@ -38,6 +39,10 @@ function Areas_Editor(){
 		source_areas = jQuery('[ae_id="source_areas"]');
 		post_title = source_areas.attr("ae_post_title");
 		post_id = source_areas.attr("ae_post_id");
+		
+		// FILL UP "STORED_SHAPE_NAMES"
+		
+		stored_shape_names = jQuery('#AllShapeNames').val().split(',')
 
 		
 		//INIT_VARS
@@ -215,14 +220,38 @@ function Areas_Editor(){
 			class:'ae_sub_panel'
 		}).appendTo(right);
 		
-		label_name = jQuery('<span/>', {
-			ae_id: 'label_name',
-			text:"new_area"+acount,
-			class:'ae_label',
+		var autocomplete_wrapper = jQuery('<div/>', {
+			class:'ui-widget',
 		}).appendTo(property);
+		
+		var label_name = jQuery('<label/>', {
+			ae_id: 'label_name',
+			text:"Area Name : ",
+			class:'ae_label',
+			for:'#input_name',
+		}).appendTo(autocomplete_wrapper);
 		
 		input_name = jQuery('<input/>', {
 			ae_id: 'input_name',
+			id: 'input_name',
+			value:"new_area"+acount,
+			class:'ae_input',
+		}).appendTo(autocomplete_wrapper);
+		
+
+	    jQuery('#input_name').autocomplete({
+	      source: stored_shape_names
+	    });		
+		
+		
+		label_title = jQuery('<span/>', {
+			ae_id: 'label_title',
+			text:"Area Title : ",
+			class:'ae_label',
+		}).appendTo(property);
+		
+		input_title = jQuery('<input/>', {
+			ae_id: 'input_title',
 			type:'text',
 			value:"new_area"+acount,
 			class:'ae_input',
@@ -238,7 +267,7 @@ function Areas_Editor(){
 		
 		jQuery(bt_add).click(function( event ) {
 			
-			add_area(input_name.val(),'poly',polygon.getCoords().slice());
+			add_area(input_name.val(),input_title.val(),'poly',polygon.getCoords().slice());
 			update_listed_areas();
 			init_property();
 
@@ -255,9 +284,9 @@ function Areas_Editor(){
 		jQuery(bt_update).click(function( event ) {
 			
 			if(selected_area != undefined){
-				update_area(selected_area.getID(),input_name.val());
-				setMode('polygon');
-				init_property();
+				update_area(selected_area.getID(),input_name.val(),input_title.val());
+				//setMode('polygon');
+				//init_property();
 			}
 
 		});
@@ -332,8 +361,6 @@ function Areas_Editor(){
 							}
 						}
 						
-
-
 					}
 
 				break;
@@ -383,11 +410,11 @@ function Areas_Editor(){
 		
 		var optimal_width = left.width()+img.width+right.width();
 		
-		console.log(optimal_width)
+		console.log(optimal_width);
 		
-		areas_editor.css('max-width',optimal_width+60)
+		areas_editor.css('max-width',optimal_width+60);
 		
-		areas_list.css('height',(img.height - property.height()) -45)
+		areas_list.css('height',(img.height - property.height()) -45);
 		
 		
 		update_canvas();
@@ -479,11 +506,11 @@ function Areas_Editor(){
 	
 	//FACTORY__________________________________________________________
 	
-	function add_area(_name,_shape,_coords){
+	function add_area(_name,_title,_shape,_coords){
 		
 		if(_coords.length >= 2){
 		
-		var narea = new Area(_name,_shape,_coords,acount);
+		var narea = new Area(_name,_title,_shape,_coords,acount);
 		
 			areas.unshift(narea);
 			deselect_all();
@@ -524,7 +551,7 @@ function Areas_Editor(){
 	}
 	
 	
-	function update_area(_ID,_name){
+	function update_area(_ID,_name,_title){
 		
 		var uarea = getArea(_ID);
 		
@@ -532,9 +559,11 @@ function Areas_Editor(){
 			
 			uarea.setName(_name);
 			
-			uarea.setState('added');
+			uarea.setTitle(_title)
 			
-			deselect_all();
+			//uarea.setState('added');
+			
+			//deselect_all();
 			
 			update_canvas();
 			
@@ -557,6 +586,8 @@ function Areas_Editor(){
 				selected_area = areas[i];
 				
 				input_name.val(areas[i].getName());
+				
+				input_title.val(areas[i].getTitle());
 				
 				areas[i].setState('edited');
 				
@@ -712,6 +743,7 @@ function Areas_Editor(){
 	}
 	
 	function update_output_info(_msg){
+		
 		output_info.text(_msg);
 		
 	}
@@ -719,13 +751,14 @@ function Areas_Editor(){
 	function init_property(){
 		
 		input_name.val("new_area"+acount);
-		polygon = new Area('unborn','poly',new Array(),00);
+		input_title.val("new_area"+acount);
+		polygon = new Area('unborn','no_title','poly',new Array());
 		
 	}
 	
 	function edit_area_name(){
 		
-		label_name.hide();
+		//label_name.hide();
 		input_name.show();
 		
 	}
@@ -852,7 +885,7 @@ function Areas_Editor(){
 			var shape = jQuery(this).attr( "shape" );
 			var coords = jQuery(this).attr( "coords" ).split(',');
 			var clean_coords = [];
-			var iarea = new Area('imported_area'+i,shape,new Array());
+			var iarea = new Area('imported_area'+i,title,shape,new Array());
 			
 			switch (shape){
 			
@@ -907,7 +940,7 @@ function Areas_Editor(){
 			
 			name = name.slice(1) != "" ? name.slice( 1 ) : '.';
 
-			add_area(name,shape,iarea.getCoords(),title);
+			add_area(name,title,shape,iarea.getCoords());
 			
 					
 			update_output_info("areas up to date");
@@ -953,7 +986,7 @@ function Areas_Editor(){
 	//------------------------------------------SUB CLASS AREA-------------------------------------------
 	//---------------------------------------------------------------------------------------------------
 	
-	function Area (_name,_shape,_coords,_ID,_title){
+	function Area (_name,_title,_shape,_coords,_ID){
 
 		
 		//PRIVATE VARS__________________________________________________________
@@ -1054,7 +1087,8 @@ function Areas_Editor(){
 		// SETTERS__________________________________________________________ 
 		
 		this.setName = function(_name){ name = _name}
-		this.setTitle = function(_title){ title = _tilte}
+		
+		this.setTitle = function(_title){ title = _title}
 		
 		this.setState = function(_state){state = _state;}
 		
@@ -1132,6 +1166,7 @@ function Areas_Editor(){
 			switch (shape){
 			
 				case 'poly':
+					
 					ctx.moveTo(scale_offset_x(coords[0].x),scale_offset_y(coords[0].y));
 					
 					for(var i = 0 ; i<coords.length; i++){

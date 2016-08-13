@@ -426,35 +426,6 @@ add_filter('style_loader_tag', 'html5_style_remove'); // Remove 'text/css' from 
 add_filter('post_thumbnail_html', 'remove_thumbnail_dimensions', 10); // Remove width and height dynamic attributes to thumbnails
 add_filter('image_send_to_editor', 'remove_thumbnail_dimensions', 10); // Remove width and height dynamic attributes to post images
 
-
-/* prevent author from editing other authors' posts */
-
-function posts_for_current_author($query) {
-
-	    global $pagenow;
-
-	    if( 'edit.php' != $pagenow || !$query->is_admin ){
-	    	
-	        return $query;
-	    	
-	    }
-
-
-	    if( !current_user_can( 'edit_others_posts' ) ) {
-
-	        global $user_ID;
-
-	        $query->set('author', $user_ID );
-
-	    }
-
-	    return $query;
-
-}
-
-add_filter('pre_get_posts', 'posts_for_current_author');
-
-
 // Remove Filters
 remove_filter('the_excerpt', 'wpautop'); // Remove <p> tags from Excerpt altogether
 
@@ -518,14 +489,15 @@ if(!function_exists('remember_painting')){
 			
 			if (session_status() == PHP_SESSION_NONE) {
 				
-				//session_start();
+
 				
 			}		
 			
 			if(!isset($_SESSION['last_paintings'])){
 				
+				$last_paintings = array();
 				
-				$last_paintings = [$post->ID];
+				array_unshift($last_paintings,$post->ID);
 				
 				$_SESSION['last_paintings'] = $last_paintings;
 				
@@ -535,13 +507,13 @@ if(!function_exists('remember_painting')){
 				
 				$last_paintings = $_SESSION['last_paintings'];
 				
-				array_unshift($last_paintings,$post->ID);
-	
-				if(count($last_paintings)>4){
+				if(count($last_paintings)>8){
 					
 					array_pop($last_paintings);
 					
 				}
+				
+				array_unshift($last_paintings,$post->ID);
 				
 				$_SESSION['last_paintings'] = $last_paintings;
 				
@@ -569,6 +541,11 @@ if(!function_exists('remember_shape')){
 if(!function_exists('the_illustration')){
 	
 	function the_illustration($otherpost=null){
+		
+		
+		remember_painting();
+		
+		remember_shape();
 		
 		if($otherpost!=null){
 				
@@ -652,9 +629,8 @@ if(!function_exists('the_illustration')){
 
 		}
 		
-		remember_painting();
-		
-		remember_shape();
+	
+
 		
 		include(locate_template('template_illustration.php'));
 		
@@ -768,7 +744,6 @@ if(!function_exists('the_areas')){
 				
 			$map_scale = 1;
 				
-				
 		}
 
 		if($map_offset_x != ""){
@@ -796,7 +771,7 @@ if(!function_exists('the_areas')){
 
 		$details_link = add_query_arg( array( 'part' => "details" ));
 
-		remember_painting();
+		//remember_painting();
 
 		remember_shape();
 
@@ -830,7 +805,7 @@ if(!function_exists('collect_shapes')){
 		
 		if(isset($str)){
 			
-			$shapes = [];
+			$shapes = array();
 
 			$pattern = '/href="#(.*?)"/';
 			
@@ -964,15 +939,17 @@ if(!function_exists('remove_visited')){
 				for ($j = 0 ; $j < count($arr); $j++){
 					
 					foreach ($arr as $key => $p){
+						
+						if(array_key_exists ($j,$visited_paintings)){
 							
-						if($p == $visited_paintings[$j]){
+							if($p == $visited_paintings[$j]){
+									
+									unset($arr[$key]);
+									array_values($arr);
 								
-							if(count($arr)>1){
-								
-								unset($arr[$key]);
-								array_values($arr);
 							}	
-						}	
+						
+						}
 					}
 				}
 			}		
@@ -984,22 +961,37 @@ if(!function_exists('remove_visited')){
 if(!function_exists('choose_painting_in')){
 
 	function choose_painting_in($strclass){
-
-		$visited_paintings = get_visited_paintings();
 		
 		if(isset($strclass)){
+			
+			global $post;
 
 			foreach ($strclass as $key => $list){
 
-				if(count($list)>1){
+			
+			if(count($list)>1){
+				
+			$current_painting_index = array_search ($post->ID,$list);
 					
-					$list = remove_visited($list);
+				//	$list = remove_visited($list);
 
-					$random_index = array_rand( $list);
+					//$random_index = array_rand( $list);
 
-					$random_elem =  $list[$random_index];
+					//$random_elem =  $list[$random_index];
+					
+					$next_index = $current_painting_index+1;
 
-					$strclass->$key  = $random_elem;
+					if($next_index > count($list)-1){
+					
+						$next_index = 0;						
+											
+					}
+					
+					if(array_key_exists ($next_index,$list)){
+						
+						$strclass->$key = $list[$next_index];
+						
+					}
 
 				}else if(count($list)==1){
 						
@@ -1076,13 +1068,9 @@ if(!function_exists('collect_matching_paintings')){
 		
 		$all_published_posts = get_posts($query);
 		
-		$memory = 2;
-		
-		$visited_paintings = get_visited_paintings();
-		
 		foreach ( $all_published_posts as $other_post ) {
 			
-			if($other_post->ID != $post->ID){
+			//if($other_post->ID != $post->ID){
 				
 				$recently_visited = false;
 				
@@ -1102,7 +1090,7 @@ if(!function_exists('collect_matching_paintings')){
 	
 				}
 			
-			}
+			//}
 			
 		}
 		
@@ -1116,10 +1104,15 @@ if(!function_exists('collect_matching_paintings')){
 if(!function_exists('get_visited_paintings')){
 	
 	function get_visited_paintings(){
+		
+		
+				echo ("__:");
 
 		if (session_status() == PHP_SESSION_NONE) {
 		
-			//session_start();
+			/*session_start();
+			
+			$_SESSION['last_paintings'] = array();*/
 		
 		}
 			
@@ -1141,8 +1134,13 @@ if(!function_exists('get_visited_paintings')){
 if(!function_exists('history_list')){
 	
 	function history_list(){
-		 
+		
+		if(isset($_SESSION['couleur'])){
+			
 		echo $_SESSION['couleur'];
+			
+		}
+		 
 		
 	}
 	
@@ -1278,6 +1276,50 @@ if(!function_exists('get_shape_list')){
 
 }
 
+if(!function_exists('alphabetic_shape_list')){
+	
+	function alphabetic_shape_list(){
+		
+		$shape_list = get_shape_list();
+		
+		$alphabetic_list = array();
+		
+		$alphabet = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","X","Y","Z","?"];
+		
+		foreach ( $alphabet as $letter ){
+			
+			$alphabetic_list[strtolower($letter)] = array();
+
+			
+		}
+		
+		
+		usort($shape_list, 'compareByName');
+		
+		foreach ( $shape_list as $shape ){
+		
+			$shape_name = $shape['name'] ;
+			
+
+			$first_letter = mb_substr($shape_name, 0, 1, 'utf-8');
+			
+
+			if(array_key_exists ($first_letter,$alphabetic_list)){
+				
+				array_push($alphabetic_list[$first_letter],$shape_name);		
+					
+			}	
+			
+		}
+		
+		return $alphabetic_list;
+	
+		
+	}
+	
+	
+}
+
 
 if(!function_exists('get_artist_list')){
 
@@ -1366,6 +1408,17 @@ if(!function_exists('get_random_painting')){
 	}
 
 }
+
+if(!function_exists('include_template')){
+	
+	function include_template($template_name){
+		
+		include_once('template_'.$template_name);
+		
+	}
+
+}
+
 
 
 function random_painting_link( $atts, $content = null ) {

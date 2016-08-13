@@ -24,13 +24,10 @@
 		<div id="history">...</div>
 	</div>
 	
-	<?php if(has_text()):?>
-	
 		<div class="fils-right">
 			<div class="slide-right"><a href="<?php echo $text_link; ?>">▲<br>texte</a></div>
 		</div>
-	
-	<?php endif;?>
+
 	
 	<?php if(has_details()):?>
 	
@@ -39,5 +36,4 @@
 		</div>
 	
 	<?php endif;?>
-	
 	
