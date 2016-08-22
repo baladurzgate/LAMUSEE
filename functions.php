@@ -1013,40 +1013,6 @@ if(!function_exists('choose_painting_in')){
 
 }
 
-if(!function_exists('choose_random_elem_in')){
-
-	function choose_random_elem_in($strclass){
-		
-		if(isset($strclass)){
-				
-			foreach ($strclass as $key => $list){
-				
-				if(count($list)>1){
-				
-					$random_index = array_rand( $list);
-				
-					$random_elem =  $list[$random_index];
-				
-					$strclass->$key  = $random_elem;
-				
-				}else if(count($list)==1){
-					
-					$strclass->$key  = $list[0];
-					
-				}else{
-					
-					unset($strclass->$key);
-					
-				}
-				
-			}
-
-		}
-		return false;
-
-	}
-
-}
 
 if(!function_exists('collect_matching_paintings')){
 	
@@ -1214,19 +1180,19 @@ if(!function_exists('get_shape_list')){
 
 		$all_published_posts = get_posts($query);
 		
+		// on parcours tout les tableaux
+		
 		foreach ( $all_published_posts as $post ) {
 			
 			$post_areas_str = get_field('areas',$post->ID);
 			
 			$post_shapes = collect_shapes($post_areas_str);
 			
-			$added_shapes = array();
-			
 			$treated_shapes = array();
 			
 			foreach ( $post_shapes as  $shape ) {
 				
-				$match1 = 0;
+				$match = 0;
 				
 				if(count($shape_list)>0){
 					
@@ -1236,7 +1202,7 @@ if(!function_exists('get_shape_list')){
 							
 							array_push($shape_list[$key]['paintings'],$post->ID);
 							
-							$match1++;
+							$match++;
 							
 							$treated_shapes[$shape] = true;
 
@@ -1246,7 +1212,9 @@ if(!function_exists('get_shape_list')){
 				
 				}
 				
-				if($match1 == 0 && $shape != "" && !isset($treated_shapes[$shape])){
+				// si la shape n'est pas dans la shape_list on ajoute une ligne. 
+				
+				if($match == 0 && $shape != "" && !isset($treated_shapes[$shape])){
 					
 					$row = array();
 					
@@ -1255,8 +1223,10 @@ if(!function_exists('get_shape_list')){
 					$row['paintings'] = array();
 						
 					array_push($row['paintings'],$post->ID);
-						
-					array_push($added_shapes,$row);
+					
+					$merged_shape_list = array_merge($shape_list,$row);
+			
+					$shape_list = $merged_shape_list ;
 					
 					$treated_shapes[$shape] = true;
 					
@@ -1264,9 +1234,7 @@ if(!function_exists('get_shape_list')){
 				
 			}
 				
-			$merged_shape_list = array_merge($shape_list,$added_shapes);
-			
-			$shape_list = $merged_shape_list ;
+
 				
 		}
 		
