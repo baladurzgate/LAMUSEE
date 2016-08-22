@@ -1168,7 +1168,16 @@ if(!function_exists('the_shapes')){
 
 }
 
-
+/* Parcours tout les tableaux du site et inspecte leur shapes pour ensuite ajouter l'index du tableau(post_ID) dans les différentes lignes de l'array shape_list.
+voir rajouter une nouvelle ligne si le tableau contient une shape inexistante dans le tableau. 
+ structure de shape_list :
+  
+ [index(int)][name(string)][paintings(array)]
+ 
+ Exemple : [0]["ange"][8,20,11]
+ 			  [1]["casque"][12,154,20,9]
+ 
+ */
 
 if(!function_exists('get_shape_list')){
 
@@ -1212,7 +1221,7 @@ if(!function_exists('get_shape_list')){
 				
 				}
 				
-				// si la shape n'est pas dans la shape_list on ajoute une ligne. 
+				// si la shape n'existe pas on ajoute une ligne correspondante dans la shape_list
 				
 				if($match == 0 && $shape != "" && !isset($treated_shapes[$shape])){
 					
@@ -1223,6 +1232,8 @@ if(!function_exists('get_shape_list')){
 					$row['paintings'] = array();
 						
 					array_push($row['paintings'],$post->ID);
+					
+					// on utilise la méthode array_merge pour ne pas créer de doublons. 
 					
 					$merged_shape_list = array_merge($shape_list,$row);
 			
