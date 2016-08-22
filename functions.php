@@ -1168,18 +1168,21 @@ if(!function_exists('the_shapes')){
 
 }
 
+
+if(!function_exists('get_shape_list')){
+	
+	
 /* Parcours tout les tableaux du site et inspecte leur shapes pour ensuite ajouter l'index du tableau(post_ID) dans les différentes lignes de l'array shape_list.
 voir rajouter une nouvelle ligne si le tableau contient une shape inexistante dans le tableau. 
- structure de shape_list :
-  
- [index(int)][name(string)][paintings(array)]
+
+ return array([name(string)][paintings(array)])
  
  Exemple : [0]["ange"][8,20,11]
  			  [1]["casque"][12,154,20,9]
+ 			  
  
  */
 
-if(!function_exists('get_shape_list')){
 
 	function get_shape_list(){
 		
@@ -1196,6 +1199,8 @@ if(!function_exists('get_shape_list')){
 			$post_areas_str = get_field('areas',$post->ID);
 			
 			$post_shapes = collect_shapes($post_areas_str);
+			
+			//treated_shapes permet de ne pas compter plusieurs foi une même shape lorsque celle-ci a plusieurs occurrences dans un tableau. 
 			
 			$treated_shapes = array();
 			
@@ -1254,6 +1259,18 @@ if(!function_exists('get_shape_list')){
 	}
 
 }
+
+if(!function_exists('build_shape_table')){
+
+	function build_shape_table(){
+		
+		
+		
+	}
+
+
+}
+
 
 if(!function_exists('alphabetic_shape_list')){
 	
