@@ -803,57 +803,7 @@ if(!function_exists('zoom_link')){
 
 }
 
-if(!function_exists('collect_shapes')){
-	
-	function collect_shapes($str){
-		
-		if(isset($str)){
-			
-			$shapes = array();
 
-			$pattern = '/href="#(.*?)"/';
-			
-			preg_match_all($pattern,$str,$shapes, PREG_PATTERN_ORDER);
-						
-			return $shapes[1];
-				
-		}
-		
-		return false;
-
-	}
-	
-}
-
-if(!function_exists('prepare_shape_grid')){
-
-	function prepare_shape_grid($shapes){
-
-		if(isset($shapes)){
-				
-			$grid = new stdClass();
-					
-			foreach($shapes as $shape){
-				
-				if($shape != null && $shape != ""){
-				
-					$key = str_replace(' ', '_',$shape );
-				
-					$grid->$key  = array();
-				
-				}
-				
-			}
-			
-			return $grid;
-
-		}
-
-		return false;
-
-	}
-
-}
 
 
 if(!function_exists('has_text')){
@@ -1206,7 +1156,60 @@ if(!function_exists('the_shapes')){
 
 }
 
+if(!function_exists('collect_shapes')){
+	
+	function collect_shapes($str){
+		
+		if(isset($str)){
+			
+			$shapes = array();
 
+			$pattern = '/href="#(.*?)"/';
+			
+			preg_match_all($pattern,$str,$shapes, PREG_PATTERN_ORDER);
+						
+			return $shapes[1];
+				
+		}
+		
+		return false;
+
+	}
+	
+}
+
+
+
+
+if(!function_exists('prepare_shape_grid')){
+
+	function prepare_shape_grid($shapes){
+
+		if(isset($shapes)){
+				
+			$grid = new stdClass();
+					
+			foreach($shapes as $shape){
+				
+				if($shape != null && $shape != ""){
+				
+					$key = str_replace(' ', '_',$shape );
+				
+					$grid->$key  = array();
+				
+				}
+				
+			}
+			
+			return $grid;
+
+		}
+
+		return false;
+
+	}
+
+}
 
 if(!function_exists('get_shape_list')){
 	
@@ -1289,6 +1292,189 @@ voir rajouter une nouvelle ligne si le tableau contient une shape inexistante da
 }
 
 
+class Shape{
+
+
+	private $shape_ID;
+	private $shape_name;
+	private $shape_nice_name;
+	private $shape_paintings_list;
+
+
+	public function __construct($name,$nice_name,$paintings_list) { 
+	
+		$this->shape_name = $name;
+		$this->shape_nice_name = $nice_name;
+		$this->shape_paintings_list = $paintings_list;
+	
+	}
+	
+	public function add_painting($p){
+	
+			
+		
+	}
+	
+	public function getName (){
+	
+		return $this->shape_name;
+	
+	}	
+	
+	public function setName ($n){
+	
+		$this->shape_name = $n;	
+	
+	}
+
+	public function getNiceName (){
+	
+		return $this->shape_nice_name;
+	
+	}
+	
+	public function setNiceName ($nn){
+	
+		$this->shape_nice_name = $nn;	
+	
+	}
+
+}
+
+
+class Area{
+	
+	private $area_shape_name;
+	private $area_shape_type;
+	private $area_nice_name;
+	private $area_coords;
+	private $area_painting;
+	private $area_id;
+
+	public function __construct($sn,$st,$nn,$c,$p,$i) { 
+	
+			$this->area_shape_name = $sn;
+			$this->area_shape_type = $st;
+			$this->area_nice_name = $nn;
+			$this->area_coords = $c;
+			$this->area_painting = $p;	
+			$this->area_id = $i;
+	
+	}
+	
+	
+	public function getShapeName(){ return $this->area_shape_name;}
+	public function setShapeName($sn){ $this->area_shape_name = $sn;}
+		
+	public function getShapeType(){ return $this->area_shape_type;}
+	public function setShapeType($st){ $this->area_shape_type = $st;}
+	
+	public function getCoords(){ return $this->area_coords;}
+	public function setCoords($c){ $this->area_coords = $c;}
+	
+	public function getNiceName(){ return $this->area_nice_name;}
+	public function setNiceName($nn){ $this->area_nice_name = $nn;}
+	
+	
+	public function getPainting(){ return $this->area_painting;}
+	public function setPainting($p){ $this->area_painting = $p;}
+	
+	
+	public function getID(){ return $this->area_id;}
+	public function setID($i){ $this->area_id = $i;}
+	
+	public function areaToHTML($_link){
+		
+		$link = $_link != undefined && $_link != "" ? $_link : '#'.$this->area_shape_name;
+	
+		$HTML	=  '<area shape="'.$this->area_shape_type.'" coords="'.$this->area_coords.'" href="'.$link.'" alt="'.$this->area_shape_name.'" title = "'.$this->area_nice_name.' areaID ="'.$this->area_id.'">'."\n";
+		return $HTMLstring;
+		
+	}
+
+}
+
+
+class Lamusee{
+
+	public $shapes;
+	public $areas;
+	public $paintings;
+	public $texts;
+	public $artists;
+	
+	public function __construct() { 
+	
+		$this->shapes = array();
+		$this->areas = array();
+		$this->paintings = array();
+		$this->texts = array();
+		$this->artists = array();	
+
+	
+	}
+	
+	
+	public function init(){
+		
+			
+		$this->parse_database();
+		
+	}
+	
+	private function parse_database(){
+		
+		$this->shapes = array();
+		$this->areas = array();
+		
+		global $wpdb;
+		
+		foreach( $wpdb->get_results("SELECT * FROM wp_lamusee_shapes") as $key => $row) {
+
+			$nshape = new Shape($row->shape_name,$row->shape_nice_name,$row->shape_paintings_list);
+			
+			array_push($this->shapes,$nshape);			
+
+		}
+		
+		foreach( $wpdb->get_results("SELECT * FROM wp_lamusee_areas") as $key => $row) {
+			
+							
+			$narea = new Area($row->area_shape_name,$row->area_nice_name,$row->area_shape_type,$row->area_coords,$row->area_painting,$row->area_id);
+			
+			array_push($this->areas,$narea);
+			
+		}
+		
+		
+	}
+	
+	public function parse_painting_areas_with_random_links($post_id){
+		
+		$html = "";
+	
+		foreach ($this->areas as $area){
+			
+				
+		
+		}	
+	
+	
+	}
+
+	public function getShapeByName($n){
+	
+	
+	}
+	
+	public function getShapeByID($id){
+	
+	
+	}
+
+}
+
+
 if(!function_exists('build_shape_table')){
 	
 	
@@ -1321,8 +1507,8 @@ if(!function_exists('build_shape_table')){
 			`id` mediumint(9) NOT NULL AUTO_INCREMENT,
 			`shape_name` mediumtext NOT NULL,
 			`shape_nice-name` mediumtext NOT NULL,
-			`shape_creation_date` date NOT NULL,
-			`shape_last_modification` date NOT NULL,
+			`shape_creation_date` int NOT NULL,
+			`shape_last_modification` int NOT NULL,
 			`shape_paintings_list` mediumtext NOT NULL,
 			`shape_clicks` mediumint(9) NOT NULL,
 			UNIQUE KEY id (id)
@@ -1385,6 +1571,80 @@ if(!function_exists('build_shape_table')){
 
 }
 
+if(!function_exists('collect_areas')){
+	
+	function collect_areas($str){
+		
+		if(isset($str) && $str != ""){
+			
+			$areas = array();
+			
+			$dom= new DOMDocument();
+			$dom->loadHTML($str);
+			
+	   	foreach($dom->getElementsByTagName('area') as $area_tag) {
+
+       		 $areas[] = array(
+       		 'shape_name' => substr($area_tag->getAttribute('href'), 1),
+       		 'nice_name' => $area_tag->getAttribute('title'), 
+       		 'shape_type' => $area_tag->getAttribute('shape'), 
+       		 'coords' => $area_tag->getAttribute('coords')
+       		 );
+       		 
+  		   } 
+						
+			return $areas;
+				
+		}
+		
+		return false;
+
+	}
+	
+}
+
+if(!function_exists('get_areas_list()')){
+	
+	function get_areas_list(){
+
+		$areas_list = array();
+
+		$query = array( 'post_status' => 'publish','numberposts' => -1 );
+
+		$all_published_posts = get_posts($query);
+		
+		$global_count = 0;
+		
+		foreach ( $all_published_posts as $post ) {
+			
+			$post_areas_str = get_field('areas',$post->ID);
+			
+			$post_areas_list = collect_areas($post_areas_str);
+			
+			$local_count = 0;
+			
+			
+			foreach ($post_areas_list as $area){
+				
+				$area_id = $area['shape_type'].$post->ID.'-'.$global_count.'-'.$local_count;				
+								
+				$narea = new Area($area['shape_name'],$area['nice_name'],$area['shape_type'],$area['coords'],$post->ID,$area_id);
+				
+				array_push($areas_list,$narea);
+				
+				$global_count++;
+				$local_count++;
+			
+			}
+		}
+		
+		return $areas_list;
+
+	}	
+
+	
+}
+
 if(!function_exists('build_areas_table')){
 	
 	
@@ -1409,49 +1669,46 @@ if(!function_exists('build_areas_table')){
 		{
 			$sql = "CREATE TABLE " . $table_name . " (
 			`id` mediumint(9) NOT NULL AUTO_INCREMENT,
-			`area_shape` int NOT NULL,
-			`area_points` mediumtext NOT NULL,
+			`area_shape_name` mediumtext NOT NULL,
+			`area_shape_type` mediumtext NOT NULL,
+			`area_nice_name` mediumtext NOT NULL,
+			`area_coords` mediumtext NOT NULL,
+			`area_painting` int NOT NULL,
+			`area_id` mediumtext NOT NULL,
 			UNIQUE KEY id (id)
 			);";
  
 			require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 			dbDelta($sql);	
 			
+			$areas_list = get_areas_list();
 			
-			/*$shape_list = get_shape_list();
-		
-				if(count($shape_list)>0){
-					
-					foreach ( $shape_list as $key => $from_list ) {
-
-						
-						$serialized_paintings_list = substr(implode(", ", $from_list['paintings']), 0);
-
-
+			if(count($areas_list)>0){
+				
+				foreach ( $areas_list as $key => $area ) {	
+			
 						$wpdb->insert($table_name,
     	 						array(
-          						'shape_name'=>$from_list['name'],
-          						'shape_nice-name'=>$from_list['name'],
-          						'shape_creation_date'=>time(),
-          						'shape_last_modification'=>time(),
-          						'shape_paintings_list'=> $serialized_paintings_list,
-          						'shape_clicks'=>0
+          						'area_shape_name'=>$area->getShapeName(),
+          						'area_shape_type'=>$area->getShapeType(),
+          						'area_nice_name'=>$area->getNiceName(),
+          						'area_coords'=>$area->getCoords(),
+          						'area_painting'=>$area->getPainting(),
+          						'area_id'=>$area->getID(),
      							),
     	 						array( 
           						'%s',
           						'%s',
-          						'%d',
-          						'%d',
           						'%s',
-          						'%d'
+          						'%s',
+          						'%s',
+          						'%s'
      							)
-						);
-
-					}
-				
-				}*/
-				
+						);					
 			
+				}
+				
+			}
 		
 		}
 		
