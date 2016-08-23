@@ -461,6 +461,10 @@ function html5_shortcode_demo_2($atts, $content = null) // Demo Heading H2 short
 
 
 
+
+/******************************************LAMUSEE*****************************************/
+
+
 add_query_arg( 'part');
 
 
@@ -1013,6 +1017,40 @@ if(!function_exists('choose_painting_in')){
 
 }
 
+if(!function_exists('choose_random_elem_in')){
+
+	function choose_random_elem_in($strclass){
+		
+		if(isset($strclass)){
+				
+			foreach ($strclass as $key => $list){
+				
+				if(count($list)>1){
+				
+					$random_index = array_rand( $list);
+				
+					$random_elem =  $list[$random_index];
+				
+					$strclass->$key  = $random_elem;
+				
+				}else if(count($list)==1){
+					
+					$strclass->$key  = $list[0];
+					
+				}else{
+					
+					unset($strclass->$key);
+					
+				}
+				
+			}
+
+		}
+		return false;
+
+	}
+
+}
 
 if(!function_exists('collect_matching_paintings')){
 	
@@ -1169,8 +1207,8 @@ if(!function_exists('the_shapes')){
 }
 
 
+
 if(!function_exists('get_shape_list')){
-	
 	
 /* Parcours tout les tableaux du site et inspecte leur shapes pour ensuite ajouter l'index du tableau(post_ID) dans les différentes lignes de l'array shape_list.
 voir rajouter une nouvelle ligne si le tableau contient une shape inexistante dans le tableau. 
@@ -1178,11 +1216,7 @@ voir rajouter une nouvelle ligne si le tableau contient une shape inexistante da
  return array([name(string)][paintings(array)])
  
  Exemple : [0]["ange"][8,20,11]
- 			  [1]["casque"][12,154,20,9]
- 			  
- 
- */
-
+ 			  [1]["casque"][12,154,20,9]*/	
 
 	function get_shape_list(){
 		
@@ -1192,21 +1226,19 @@ voir rajouter une nouvelle ligne si le tableau contient une shape inexistante da
 
 		$all_published_posts = get_posts($query);
 		
-		// on parcours tout les tableaux
-		
 		foreach ( $all_published_posts as $post ) {
 			
 			$post_areas_str = get_field('areas',$post->ID);
 			
 			$post_shapes = collect_shapes($post_areas_str);
 			
-			//treated_shapes permet de ne pas compter plusieurs foi une même shape lorsque celle-ci a plusieurs occurrences dans un tableau. 
+			$added_shapes = array();
 			
 			$treated_shapes = array();
 			
 			foreach ( $post_shapes as  $shape ) {
 				
-				$match = 0;
+				$match1 = 0;
 				
 				if(count($shape_list)>0){
 					
@@ -1216,7 +1248,7 @@ voir rajouter une nouvelle ligne si le tableau contient une shape inexistante da
 							
 							array_push($shape_list[$key]['paintings'],$post->ID);
 							
-							$match++;
+							$match1++;
 							
 							$treated_shapes[$shape] = true;
 
@@ -1226,9 +1258,7 @@ voir rajouter une nouvelle ligne si le tableau contient une shape inexistante da
 				
 				}
 				
-				// si la shape n'existe pas on ajoute une ligne correspondante dans la shape_list
-				
-				if($match == 0 && $shape != "" && !isset($treated_shapes[$shape])){
+				if($match1 == 0 && $shape != "" && !isset($treated_shapes[$shape])){
 					
 					$row = array();
 					
@@ -1237,12 +1267,8 @@ voir rajouter une nouvelle ligne si le tableau contient une shape inexistante da
 					$row['paintings'] = array();
 						
 					array_push($row['paintings'],$post->ID);
-					
-					// on utilise la méthode array_merge pour ne pas créer de doublons. 
-					
-					$merged_shape_list = array_merge($shape_list,$row);
-			
-					$shape_list = $merged_shape_list ;
+						
+					array_push($added_shapes,$row);
 					
 					$treated_shapes[$shape] = true;
 					
@@ -1250,7 +1276,9 @@ voir rajouter une nouvelle ligne si le tableau contient une shape inexistante da
 				
 			}
 				
-
+			$merged_shape_list = array_merge($shape_list,$added_shapes);
+			
+			$shape_list = $merged_shape_list ;
 				
 		}
 		
@@ -1260,17 +1288,186 @@ voir rajouter une nouvelle ligne si le tableau contient une shape inexistante da
 
 }
 
-if(!function_exists('build_shape_table')){
 
+if(!function_exists('build_shape_table')){
+	
+	
 	function build_shape_table(){
+
+		global $wpdb;
+  		global $table_name ;
+  		
+  		$table_name = $wpdb->prefix."lamusee_shapes";
+ 
+		// on creer la table "wp_lamusee_shapes" qui renseigne sur le nom des shapes , l'index des tableaux(post_ID) où elles apparaissent et 
+		/*
+			shape_name                :nom de la shape 
+			shape_nice-name           :nom affiché
+			shape_creation_date       :date de creation de la shape
+			shape_last_modification   :date de la dernière modification de la shape (ajout de tableau)
+			shape_paintings_list      :liste des indexes des tableaux(post_ID) où la shape est présente
+			shape_clicks				  :total des clicks sur la shape. 
+
+			
 		
+		
+		
+		*/
+		
+		
+		if($wpdb->get_var("show tables like '$table_name'") != $table_name) 
+		{
+			$sql = "CREATE TABLE " . $table_name . " (
+			`id` mediumint(9) NOT NULL AUTO_INCREMENT,
+			`shape_name` mediumtext NOT NULL,
+			`shape_nice-name` mediumtext NOT NULL,
+			`shape_creation_date` date NOT NULL,
+			`shape_last_modification` date NOT NULL,
+			`shape_paintings_list` mediumtext NOT NULL,
+			`shape_clicks` mediumint(9) NOT NULL,
+			UNIQUE KEY id (id)
+			);";
+ 
+			require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+			dbDelta($sql);	
+			
+			
+			$shape_list = get_shape_list();
+		
+				if(count($shape_list)>0){
+					
+					foreach ( $shape_list as $key => $from_list ) {
+						
+						// on convertis la listes des tableaux associés à la shape en string de forme a,b,c,d
+						
+						$serialized_paintings_list = substr(implode(", ", $from_list['paintings']), 0);
+						
+						// on rempli la table wp_lamusee_shapes dans la base de donnée
+
+						$wpdb->insert($table_name,
+    	 						array(
+          						'shape_name'=>$from_list['name'],
+          						'shape_nice-name'=>$from_list['name'],
+          						'shape_creation_date'=>time(),
+          						'shape_last_modification'=>time(),
+          						'shape_paintings_list'=> $serialized_paintings_list,
+          						'shape_clicks'=>0
+     							),
+    	 						array( 
+          						'%s',
+          						'%s',
+          						'%d',
+          						'%d',
+          						'%s',
+          						'%d'
+     							)
+						);
+
+					}
+				
+				}
+				
+			
+		
+		}
+		
+
+		
+		
+		
+		$results = $wpdb->get_results("SELECT * FROM wp_lamusee_shapes");
+		print_r($results);
 		
 		
 	}
-
+	
+	build_shape_table();
 
 }
 
+if(!function_exists('build_areas_table')){
+	
+	
+	function build_areas_table(){
+
+		global $wpdb;
+  		global $table_name ;
+  		
+  		$table_name = $wpdb->prefix."lamusee_areas";
+ 
+		// on creer la table "wp_lamusee_areas" 
+		/*
+			area_shape                :shape associée
+			area_points               :points
+	
+		
+		
+		*/
+		
+		
+		if($wpdb->get_var("show tables like '$table_name'") != $table_name) 
+		{
+			$sql = "CREATE TABLE " . $table_name . " (
+			`id` mediumint(9) NOT NULL AUTO_INCREMENT,
+			`area_shape` int NOT NULL,
+			`area_points` mediumtext NOT NULL,
+			UNIQUE KEY id (id)
+			);";
+ 
+			require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+			dbDelta($sql);	
+			
+			
+			/*$shape_list = get_shape_list();
+		
+				if(count($shape_list)>0){
+					
+					foreach ( $shape_list as $key => $from_list ) {
+
+						
+						$serialized_paintings_list = substr(implode(", ", $from_list['paintings']), 0);
+
+
+						$wpdb->insert($table_name,
+    	 						array(
+          						'shape_name'=>$from_list['name'],
+          						'shape_nice-name'=>$from_list['name'],
+          						'shape_creation_date'=>time(),
+          						'shape_last_modification'=>time(),
+          						'shape_paintings_list'=> $serialized_paintings_list,
+          						'shape_clicks'=>0
+     							),
+    	 						array( 
+          						'%s',
+          						'%s',
+          						'%d',
+          						'%d',
+          						'%s',
+          						'%d'
+     							)
+						);
+
+					}
+				
+				}*/
+				
+			
+		
+		}
+		
+
+		
+		
+		
+		$results = $wpdb->get_results("SELECT * FROM wp_lamusee_shapes");
+		print_r($results);
+		
+		
+	}
+	
+	build_areas_table();
+
+}
 
 if(!function_exists('alphabetic_shape_list')){
 	
