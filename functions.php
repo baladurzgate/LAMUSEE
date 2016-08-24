@@ -542,250 +542,6 @@ if(!function_exists('remember_shape')){
 
 
 }
-if(!function_exists('the_illustration')){
-	
-	function the_illustration($otherpost=null){
-		
-		
-		remember_painting();
-		
-		remember_shape();
-		
-		if($otherpost!=null){
-				
-			$post = $otherpost;
-				
-		}else{
-				
-			global $post;
-				
-		}
-
-		$post_url = get_permalink( $post->ID);
-		
-		$image = get_field('lowres_image',$post->ID);
-				
-		$area_field = get_field('areas',$post->ID);
-			
-		$areas = clean_area_field($area_field);
-			
-		$image_highres = get_field('image_highres',$post->ID);
-		
-		$modifed_areas = $areas;
-		
-		$map_scale = get_field('map_scale',$post->ID);
-		
-		$map_offset_x = get_field('map_offset_x',$post->ID);
-		
-		$map_offset_y = get_field('map_offset_y',$post->ID);
-		
-		if($map_scale != ""){
-			
-			$map_scale = floatval($map_scale);
-			
-			if($map_scale == 0)$map_scale = 1;
-			
-		}else{
-			
-			$map_scale = 1;
-			
-			
-		}	
-
-		if($map_offset_x != ""){
-				
-			$map_offset_x  = floatval($map_offset_x);
-				
-		}else{
-				
-			$map_offset_x = 0;
-				
-				
-		}
-		
-		if($map_offset_y != ""){
-				
-			$map_offset_y  = floatval($map_offset_y);
-				
-		}else{
-				
-			$map_offset_y = 0;
-				
-				
-		}
-
-		$text_link = add_query_arg( array( 'part' => "text" ));		
-		
-		$details_link = add_query_arg( array( 'part' => "details" ));
-		
-		$areas_link = add_query_arg( array( 'part' => "areas" ));
-		
-		
-		$paintings_list = collect_matching_paintings();
-		
-		choose_painting_in($paintings_list);
-
-		foreach ($paintings_list as $shape_name => $painting_id){
-			
-			$url = get_permalink($painting_id);
-				
-			$modifed_areas = fill_areas_href($modifed_areas,$shape_name,$url);
-
-		}
-		
-	
-
-		
-		include(locate_template('template_illustration.php'));
-		
-		
-	}
-	
-}
-
-
-
-if(!function_exists('the_text')){
-	
-	function the_text($otherpost=null){
-		
-		if($otherpost!=null){
-			
-			$post = $otherpost;
-			
-		}else{
-			
-			global $post;
-			
-		}
-		
-		$image = get_field('lowres_image',$post->ID);
-		
-		$relation = get_field('linked_text',$post->ID);
-		
-		$linked_text  = $relation[0];
-		
-		if(get_post_format( $linked_text->ID )){
-			
-			$text = $linked_text->post_content;
-			
-			$history_link = get_permalink( $post->ID);
-				
-			include(locate_template('template_text.php'));	
-				
-		}else{
-			
-			include(locate_template('missing_text.php'));
-			
-		}
-
-		
-
-
-	}
-	
-}
-
-if(!function_exists('the_details')){
-
-	function the_details(){
-
-		global $post;
-
-		if(get_post_format( $post->ID )== 'image'){
-				
-			$image = get_field('lowres_image',$post->ID);
-
-			$image_highdef = get_field('image_highdef',$post->ID);
-				
-			$history_link = get_permalink( $post->ID);
-
-			include(locate_template('template_details.php'));
-
-		}
-
-	}
-
-}
-
-if(!function_exists('the_areas')){
-
-	function the_areas($otherpost=null){
-
-		if($otherpost!=null){
-
-			$post = $otherpost;
-
-		}else{
-
-			global $post;
-
-		}
-
-		$post_url = get_permalink( $post->ID);
-
-		$image = get_field('lowres_image',$post->ID);
-			
-		$area_field = get_field('areas',$post->ID);
-			
-		$areas = clean_area_field($area_field);
-
-		$image_highres = get_field('image_highres',$post->ID);
-
-		$map_scale = get_field('map_scale',$post->ID);
-
-		$map_offset_x = get_field('map_offset_x',$post->ID);
-
-		$map_offset_y = get_field('map_offset_y',$post->ID);
-
-		if($map_scale != ""){
-				
-			$map_scale = floatval($map_scale);
-				
-			if($map_scale == 0)$map_scale = 1;
-				
-		}else{
-				
-			$map_scale = 1;
-				
-		}
-
-		if($map_offset_x != ""){
-
-			$map_offset_x  = floatval($map_offset_x);
-
-		}else{
-
-			$map_offset_x = 0;
-
-		}
-
-		if($map_offset_y != ""){
-
-			$map_offset_y  = floatval($map_offset_y);
-
-		}else{
-
-			$map_offset_y = 0;
-
-
-		}
-
-		$text_link = add_query_arg( array( 'part' => "text" ));
-
-		$details_link = add_query_arg( array( 'part' => "details" ));
-
-		//remember_painting();
-
-		remember_shape();
-
-		include(locate_template('template_areas.php'));
-
-
-	}
-
-}
-
 
 if(!function_exists('zoom_link')){
 
@@ -802,9 +558,6 @@ if(!function_exists('zoom_link')){
 	}
 
 }
-
-
-
 
 if(!function_exists('has_text')){
 
@@ -1178,9 +931,6 @@ if(!function_exists('collect_shapes')){
 	
 }
 
-
-
-
 if(!function_exists('prepare_shape_grid')){
 
 	function prepare_shape_grid($shapes){
@@ -1385,10 +1135,10 @@ class Area{
 	
 	public function areaToHTML($_link){
 		
-		$link = $_link != undefined && $_link != "" ? $_link : '#'.$this->area_shape_name;
+		$link = $_link != undefined && $_link != null ? $_link : '#'.$this->area_shape_name;
 	
-		$HTML	=  '<area shape="'.$this->area_shape_type.'" coords="'.$this->area_coords.'" href="'.$link.'" alt="'.$this->area_shape_name.'" title = "'.$this->area_nice_name.' areaID ="'.$this->area_id.'">'."\n";
-		return $HTMLstring;
+		$HTML	=  '<area shape="'.$this->area_shape_type.'" coords="'.$this->area_coords.'" href="'.$link.'" alt="'.$this->area_shape_name.'" title = "'.$this->area_nice_name.'"  areaID ="'.$this->area_id.'">'."\n";
+		return $HTML;
 		
 	}
 
@@ -1419,6 +1169,7 @@ class Lamusee{
 		
 			
 		$this->parse_database();
+		
 		
 	}
 	
@@ -1455,30 +1206,316 @@ class Lamusee{
 	
 		foreach ($this->areas as $area){
 			
+			if($area->getPainting() == $post_id){
+				
+				$shape = $this->getShapeByName($area->getShapeName());
+
+				$area_tag = $area->areaToHTML("blabla");
+				
+				$html = $html.$area_tag;
+			
+			}
 				
 		
 		}	
+		
+		echo $html;
+		
+		return $html;
 	
 	
 	}
 
 	public function getShapeByName($n){
-	
+		
+		foreach ($this->shapes as $shape){
+		
+			if($shape->getName() == $n){
+
+				return $shape;			
+			
+			}	
+			
+		}
+		
+		return false;
+			
 	
 	}
 	
 	public function getShapeByID($id){
 	
+		foreach ($this->shapes as $shape){
+		
+			if($shape->getID() == $id){
+
+				return $shape;			
+			
+			}	
+			
+		}
+		
+		return false;	
+	}
+
+}
+
+if(!function_exists('the_illustration')){
 	
+	function the_illustration($otherpost=null){
+		
+		global $LAMUSEE;
+
+		$LAMUSEE = new Lamusee();
+
+		$LAMUSEE->init();
+
+
+		
+		
+		remember_painting();
+		
+		remember_shape();
+		
+		if($otherpost!=null){
+				
+			$post = $otherpost;
+				
+		}else{
+				
+			global $post;
+				
+		}
+
+		$post_url = get_permalink( $post->ID);
+		
+		$image = get_field('lowres_image',$post->ID);
+				
+		$area_field = get_field('areas',$post->ID);
+			
+		$areas = clean_area_field($area_field);
+			
+		$image_highres = get_field('image_highres',$post->ID);
+		
+		$modifed_areas = $areas;
+		
+		$map_scale = get_field('map_scale',$post->ID);
+		
+		$map_offset_x = get_field('map_offset_x',$post->ID);
+		
+		$map_offset_y = get_field('map_offset_y',$post->ID);
+		
+		if($map_scale != ""){
+			
+			$map_scale = floatval($map_scale);
+			
+			if($map_scale == 0)$map_scale = 1;
+			
+		}else{
+			
+			$map_scale = 1;
+			
+			
+		}	
+
+		if($map_offset_x != ""){
+				
+			$map_offset_x  = floatval($map_offset_x);
+				
+		}else{
+				
+			$map_offset_x = 0;
+				
+				
+		}
+		
+		if($map_offset_y != ""){
+				
+			$map_offset_y  = floatval($map_offset_y);
+				
+		}else{
+				
+			$map_offset_y = 0;
+				
+				
+		}
+
+		$text_link = add_query_arg( array( 'part' => "text" ));		
+		
+		$details_link = add_query_arg( array( 'part' => "details" ));
+		
+		$areas_link = add_query_arg( array( 'part' => "areas" ));
+		
+		
+		$paintings_list = collect_matching_paintings();
+		
+		choose_painting_in($paintings_list);
+
+		foreach ($paintings_list as $shape_name => $painting_id){
+			
+			$url = get_permalink($painting_id);
+				
+			$modifed_areas = fill_areas_href($modifed_areas,$shape_name,$url);
+
+		}
+		
+		//$modifed_areas = $LAMUSEE->parse_painting_areas_with_random_links($post->ID);
+		
+		include(locate_template('template_illustration.php'));
+		
+		
+	}
+	
+}
+
+
+
+if(!function_exists('the_text')){
+	
+	function the_text($otherpost=null){
+		
+		if($otherpost!=null){
+			
+			$post = $otherpost;
+			
+		}else{
+			
+			global $post;
+			
+		}
+		
+		$image = get_field('lowres_image',$post->ID);
+		
+		$relation = get_field('linked_text',$post->ID);
+		
+		$linked_text  = $relation[0];
+		
+		if(get_post_format( $linked_text->ID )){
+			
+			$text = $linked_text->post_content;
+			
+			$history_link = get_permalink( $post->ID);
+				
+			include(locate_template('template_text.php'));	
+				
+		}else{
+			
+			include(locate_template('missing_text.php'));
+			
+		}
+
+		
+
+
+	}
+	
+}
+
+if(!function_exists('the_details')){
+
+	function the_details(){
+
+		global $post;
+
+		if(get_post_format( $post->ID )== 'image'){
+				
+			$image = get_field('lowres_image',$post->ID);
+
+			$image_highdef = get_field('image_highdef',$post->ID);
+				
+			$history_link = get_permalink( $post->ID);
+
+			include(locate_template('template_details.php'));
+
+		}
+
+	}
+
+}
+
+if(!function_exists('the_areas')){
+
+	function the_areas($otherpost=null){
+
+		if($otherpost!=null){
+
+			$post = $otherpost;
+
+		}else{
+
+			global $post;
+
+		}
+
+		$post_url = get_permalink( $post->ID);
+
+		$image = get_field('lowres_image',$post->ID);
+			
+		$area_field = get_field('areas',$post->ID);
+			
+		$areas = clean_area_field($area_field);
+
+		$image_highres = get_field('image_highres',$post->ID);
+
+		$map_scale = get_field('map_scale',$post->ID);
+
+		$map_offset_x = get_field('map_offset_x',$post->ID);
+
+		$map_offset_y = get_field('map_offset_y',$post->ID);
+
+		if($map_scale != ""){
+				
+			$map_scale = floatval($map_scale);
+				
+			if($map_scale == 0)$map_scale = 1;
+				
+		}else{
+				
+			$map_scale = 1;
+				
+		}
+
+		if($map_offset_x != ""){
+
+			$map_offset_x  = floatval($map_offset_x);
+
+		}else{
+
+			$map_offset_x = 0;
+
+		}
+
+		if($map_offset_y != ""){
+
+			$map_offset_y  = floatval($map_offset_y);
+
+		}else{
+
+			$map_offset_y = 0;
+
+
+		}
+
+		$text_link = add_query_arg( array( 'part' => "text" ));
+
+		$details_link = add_query_arg( array( 'part' => "details" ));
+
+		//remember_painting();
+
+		remember_shape();
+
+		include(locate_template('template_areas.php'));
+
+
 	}
 
 }
 
 
-if(!function_exists('build_shape_table')){
+if(!function_exists('build_shapes_table')){
 	
 	
-	function build_shape_table(){
+	function build_shapes_table(){
 
 		global $wpdb;
   		global $table_name ;
@@ -1506,7 +1543,7 @@ if(!function_exists('build_shape_table')){
 			$sql = "CREATE TABLE " . $table_name . " (
 			`id` mediumint(9) NOT NULL AUTO_INCREMENT,
 			`shape_name` mediumtext NOT NULL,
-			`shape_nice-name` mediumtext NOT NULL,
+			`shape_nice_name` mediumtext NOT NULL,
 			`shape_creation_date` int NOT NULL,
 			`shape_last_modification` int NOT NULL,
 			`shape_paintings_list` mediumtext NOT NULL,
@@ -1533,7 +1570,7 @@ if(!function_exists('build_shape_table')){
 						$wpdb->insert($table_name,
     	 						array(
           						'shape_name'=>$from_list['name'],
-          						'shape_nice-name'=>$from_list['name'],
+          						'shape_nice_name'=>$from_list['name'],
           						'shape_creation_date'=>time(),
           						'shape_last_modification'=>time(),
           						'shape_paintings_list'=> $serialized_paintings_list,
@@ -1561,13 +1598,13 @@ if(!function_exists('build_shape_table')){
 		
 		
 		
-		$results = $wpdb->get_results("SELECT * FROM wp_lamusee_shapes");
-		print_r($results);
-		
 		
 	}
 	
-	build_shape_table();
+	build_shapes_table();
+		$results = $wpdb->get_results("SELECT * FROM wp_lamusee_shapes");
+		print_r($results);
+		
 
 }
 
@@ -1722,7 +1759,10 @@ if(!function_exists('build_areas_table')){
 		
 	}
 	
+	
 	build_areas_table();
+	
+
 
 }
 
