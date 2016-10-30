@@ -229,7 +229,8 @@ i{
 
 		}
 b{
-	font-family: bold;
+	
+font-family: bold;
 
 	}
 
@@ -352,7 +353,7 @@ position:relative;
 .legende {
 		position: absolute;
 		background: white;
-		font-weight: bold;
+		font-family: bold;
 		margin: 0 auto;
 		width:100%;
 		}
@@ -587,7 +588,7 @@ height:10px;
 
 .alphabet{
 	
-font-family: inknut_bold;	
+font-family: bold;	
 font-size:15px;	
 	
 }
