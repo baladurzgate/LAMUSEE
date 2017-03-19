@@ -55,6 +55,25 @@ src: url(fonts/TTF-OTF/InknutAntiqua-Light.otf);
 }
 
 
+html {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  font-weight: 400;
+}
+
+/**
+ * Firefox specific rule
+ */
+@-moz-document url-prefix() {
+  body {
+    font-weight: lighter !important;
+  }
+}
+
+
+
+
 body {
 	
 	font-size: 14px;
@@ -229,8 +248,7 @@ i{
 
 		}
 b{
-	
-font-family: bold;
+	font-family: bold;
 
 	}
 
@@ -346,6 +364,13 @@ position:absolute;
 	
 
 position:relative;	
+	
+}
+
+.citation{
+
+	font-size: 8px;
+	font-family: fira;
 	
 }
 
@@ -588,7 +613,7 @@ height:10px;
 
 .alphabet{
 	
-font-family: bold;	
+font-family: inknut_bold;	
 font-size:15px;	
 	
 }
@@ -674,6 +699,8 @@ margin-left: 50px;
 		
 	
 }
+
+
 
 
 
