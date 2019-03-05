@@ -1191,7 +1191,7 @@ class Lamusee{
 		foreach( $wpdb->get_results("SELECT * FROM wp_lamusee_areas") as $key => $row) {
 			
 							
-			$narea = new Area($row->area_shape_name,$row->area_nice_name,$row->area_shape_type,$row->area_coords,$row->area_painting,$row->area_id);
+			$narea = new Area($row->area_shape_name,$row->area_shape_type,$row->area_nice_name,$row->area_coords,$row->area_painting,$row->area_id);
 			
 			array_push($this->areas,$narea);
 			
@@ -1665,7 +1665,7 @@ if(!function_exists('get_areas_list()')){
 				
 				$area_id = $area['shape_type'].$post->ID.'-'.$global_count.'-'.$local_count;				
 								
-				$narea = new Area($area['shape_name'],$area['nice_name'],$area['shape_type'],$area['coords'],$post->ID,$area_id);
+				$narea = new Area($area['shape_name'],$area['shape_type'],$area['nice_name'],$area['coords'],$post->ID,$area_id);
 				
 				array_push($areas_list,$narea);
 				
@@ -1753,7 +1753,7 @@ if(!function_exists('build_areas_table')){
 		
 		
 		
-		$results = $wpdb->get_results("SELECT * FROM wp_lamusee_shapes");
+		$results = $wpdb->get_results("SELECT * FROM wp_lamusee_areas");
 		print_r($results);
 		
 		
